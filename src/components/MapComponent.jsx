@@ -5,16 +5,11 @@ import 'leaflet/dist/leaflet.css';
 import countryData from '../data/countries.json';
 import L from 'leaflet';
 
-const SetBounds = ({ data }) => {
+const SetInitialView = ({ center, zoom }) => {
   const map = useMap();
-
   useEffect(() => {
-    if (data) {
-      const bounds = L.geoJSON(data).getBounds();
-      map.fitBounds(bounds);
-    }
-  }, [map, data]);
-
+    map.setView(center, zoom);
+  }, [map, center, zoom]);
   return null;
 };
 
@@ -32,21 +27,23 @@ const MapComponent = () => {
     });
   };
 
+  const center = [30, 10]; // Ajusta las coordenadas del centro aquí
+  const zoom = 3.5; // Ajusta el nivel de zoom aquí
+
   return (
-    <div className="h-full w-full">
+    <div className="h-screen w-full">
       <MapContainer
-        center={[20, 0]}
-        zoom={2}
-        style={{ height: '100%', width: '100%' }}
+        center={center}
+        zoom={zoom}
+        style={{ height: '200%', width: '100%' }}
         className="leaflet-container"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          noWrap={true}
         />
         <GeoJSON data={countryData.features} onEachFeature={onEachCountry} />
-        <SetBounds data={countryData.features} />
+        <SetInitialView center={center} zoom={zoom} />
       </MapContainer>
     </div>
   );
