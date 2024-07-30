@@ -18,8 +18,10 @@ const App = () => {
         </nav>
       </header>
       <main className="main">
-        <h1>Visited Countries Map</h1>
-        <p>Here is an interactive visited countries map builder - a service that will show your friends how you've conquered the world. Have you traveled a lot and want to boast about your achievements? Maybe you are compiling a dream map of the destinations on your bucket list? Create a custom interactive map in a couple of clicks and share it with your community.</p>
+        <div className="title-container">
+          <h1 className="main-title">Travel. Select. Generate.</h1>
+          <p className="main-description">Create a personalized travel map showcasing the countries you've visited. Share your adventures with friends and plan your next destination!</p>
+        </div>
         <div className="map-container">
           <MapComponent />
         </div>
