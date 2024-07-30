@@ -1,48 +1,37 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import React from 'react';
 import './index.css';
-import CountryList from './components/CountryList';
 import MapComponent from './components/MapComponent';
+import CountrySelector from './components/CountrySelector';
 
-function App() {
-  const [count, setCount] = useState(0);
-
+const App = () => {
   return (
-    <div className="w-screen h-screen flex flex-col bg-gray-100 overflow-hidden">
-      <header className="flex justify-between items-center w-full p-4 bg-white shadow">
-        <div className="flex space-x-4">
-          <a href="https://vitejs.dev" target="_blank" rel="noopener noreferrer">
-            <img src={viteLogo} className="logo h-12" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-            <img src={reactLogo} className="logo react h-12" alt="React logo" />
-          </a>
-        </div>
-        <h1 className="text-2xl font-bold text-black text-center flex-grow">Countries visited</h1>
-      </header>
-
-      <main className="flex-grow flex w-full overflow-hidden">
-        <div className="w-1/4 p-4 flex flex-col justify-between">
-          <CountryList />
-          <div className="mt-4 p-4 bg-white shadow-md rounded-md">
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-              onClick={() => setCount((count) => count + 1)}
-            >
-              count is {count}
-            </button>
-            <p className="mt-4">
-              Edit <code>src/App.jsx</code> and save to test HMR
-            </p>
+    <div>
+      <header className="header">
+        <nav className="navbar">
+          <div className="logo">
+            🌍
           </div>
-        </div>
-        <div className="flex-grow h-full">
+          <div className="nav-links">
+            <a href="#about">About</a>
+            <a href="#pdf-generator">PDF Generator</a>
+          </div>
+        </nav>
+      </header>
+      <main className="main">
+        <h1>Visited Countries Map</h1>
+        <p>Here is an interactive visited countries map builder - a service that will show your friends how you've conquered the world. Have you traveled a lot and want to boast about your achievements? Maybe you are compiling a dream map of the destinations on your bucket list? Create a custom interactive map in a couple of clicks and share it with your community.</p>
+        <div className="map-container">
           <MapComponent />
         </div>
+        <div className="country-selector-container">
+          <CountrySelector />
+        </div>
       </main>
+      <footer>
+        <p>&copy; 2023 Your Website</p>
+      </footer>
     </div>
   );
-}
+};
 
 export default App;
