@@ -4,7 +4,7 @@ body {
 }
 
 .header {
-  background-color: #0073e6;
+  background-color: #000; /* Color negro */
   color: white;
   padding: 10px 0;
 }
@@ -31,24 +31,21 @@ body {
   padding: 20px;
 }
 
-.title-container {
-  margin-bottom: 40px;
-}
-
 .main-title {
-  font-size: 48px;
-  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: #000; /* Color negro */
 }
 
 .main-description {
   font-size: 18px;
-  color: #666;
+  color: #000; /* Color negro */
 }
 
 .map-container {
   margin: 0 auto;
   width: 80%;
-  height: 500px;
+  height: 500px; /* Ajusta la altura del mapa según sea necesario */
   margin-bottom: 20px;
 }
 
@@ -81,4 +78,5 @@ footer {
   background-color: #f8f8f8;
   padding: 10px 0;
   text-align: center;
+  font-size: 14px;
 }
