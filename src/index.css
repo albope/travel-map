@@ -1,6 +1,8 @@
+/* Reset some default styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  background-color: #f9f9f9; /* Fondo claro para todo el sitio */
 }
 
 .header {
@@ -20,10 +22,11 @@ body {
   color: white;
   text-decoration: none;
   margin-left: 20px;
+  transition: color 0.3s;
 }
 
 .nav-links a:hover {
-  text-decoration: underline;
+  color: #ddd; /* Cambiar a un gris claro en hover */
 }
 
 .main {
@@ -34,35 +37,55 @@ body {
 .main-title {
   font-size: 36px;
   margin-bottom: 10px;
-  color: #000; /* Color negro */
+  color: #333; /* Cambiar a un gris oscuro para mejor contraste */
 }
 
 .main-description {
   font-size: 18px;
-  color: #000; /* Color negro */
+  color: #555; /* Cambiar a un gris más suave */
 }
 
 .map-container {
   margin: 0 auto;
   width: 80%;
-  height: 500px; /* Ajusta la altura del mapa según sea necesario */
+  height: 600px; /* Ajusta según sea necesario */
   margin-bottom: 20px;
+  background-color: white; /* Fondo blanco para el mapa */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para un efecto de elevación */
+  position: relative; /* Asegura la posición relativa */
+  overflow: hidden; /* Oculta el desbordamiento */
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: transparent;
 }
 
 .country-selector-container {
   margin: 0 auto;
   width: 80%;
   text-align: left;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px; /* Añadir margen para separarlo del mapa */
 }
 
 .country-selector {
-  text-align: left;
   padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 .country-selector h2 {
   font-size: 24px;
   margin-bottom: 20px;
+  color: #333;
 }
 
 .country-selector ul {
@@ -74,9 +97,27 @@ body {
   margin: 5px 0;
 }
 
+.country-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto; /* Permite desplazamiento vertical si los elementos exceden la altura máxima */
+  justify-content: space-between; /* Distribuye las columnas de manera uniforme */
+}
+
+.country-list .MuiFormControlLabel-root {
+  width: calc(33.33% - 20px); /* Ajusta para que quepan tres columnas */
+  transition: background-color 0.3s ease; /* Transición suave para el fondo */
+  box-sizing: border-box; /* Asegura que padding y border se incluyan en el ancho */
+  padding: 10px; /* Añadir padding para separar los elementos */
+}
+
 footer {
   background-color: #f8f8f8;
   padding: 10px 0;
   text-align: center;
   font-size: 14px;
+  color: #666; /* Texto suave para el pie de página */
+  margin-top: 20px;
 }
