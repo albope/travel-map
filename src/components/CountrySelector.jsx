@@ -267,21 +267,15 @@ const CountrySelector = ({ onCountrySelect, selectedCountries }) => {
   };
 
   const handleCountryChange = (country) => {
-    let updatedCountries;
-    
     if (selectedCountries.includes(country)) {
-      // Eliminar el país si ya está seleccionado
-      updatedCountries = selectedCountries.filter((c) => c !== country);
+      const updatedCountries = selectedCountries.filter(c => c !== country);
+      onCountrySelect(updatedCountries);
     } else {
-      // Añadir el país si no está seleccionado
-      updatedCountries = [...selectedCountries, country];
+      const updatedCountries = [...selectedCountries, country];
+      onCountrySelect(updatedCountries);
     }
 
-    // Propagar el cambio al componente padre
-    onCountrySelect(updatedCountries);
-
-    // Debugging: Mostrar el estado actualizado
-    console.log("Países seleccionados actualizados: ", updatedCountries);
+    console.log("Países seleccionados actualizados: ", selectedCountries);
   };
 
   const getCountriesByContinent = (continent) => {
@@ -297,6 +291,7 @@ const CountrySelector = ({ onCountrySelect, selectedCountries }) => {
 
   return (
     <div className="country-selector">
+      <h2 className="country-selector-title">Countries I have been to..</h2> {/* Añadir título aquí */}
       <Tabs value={value} onChange={handleTabChange} aria-label="country tabs">
         {continents.map((continent, index) => (
           <Tab key={continent} label={continent} id={`tab-${index}`} />
