@@ -1,13 +1,18 @@
+// App.jsx
 import React, { useState } from "react";
-import "./index.css";
 import MapComponent from "./components/MapComponent";
 import CountrySelector from "./components/CountrySelector";
+import "./index.css";
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
 
+  // Función para manejar la selección de países
   const handleCountrySelect = (countries) => {
     setSelectedCountries(countries);
+
+    // Debugging: Verificar la actualización del estado
+    console.log("Actualización de países seleccionados en App:", countries);
   };
 
   return (
@@ -15,7 +20,7 @@ const App = () => {
       <header className="header">
         <nav className="navbar">
           <div className="logo">
-            <span role="img" aria-label="globe">
+            <span role="img" aria-label="globo">
               🌍
             </span>
             <span>Travel-Map Generator</span>
@@ -37,7 +42,10 @@ const App = () => {
           <MapComponent selectedCountries={selectedCountries} />
         </div>
         <div className="country-selector-container">
-          <CountrySelector onCountrySelect={handleCountrySelect} />
+          <CountrySelector
+            onCountrySelect={handleCountrySelect}
+            selectedCountries={selectedCountries}
+          />
         </div>
       </main>
       <footer>
