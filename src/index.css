@@ -123,3 +123,34 @@ footer {
   color: #666; /* Soft text for footer */
   margin-top: 20px;
 }
+.stats-container {
+  margin: 0 auto;
+  width: 100%; /* Ensure full width usage */
+  max-width: 1000px; /* Optional: limit max width */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px; /* Add margin to separate it from the map */
+  display: flex;
+  justify-content: space-around; /* Distribute space between items */
+  align-items: center; /* Center items vertically */
+  text-align: center; /* Center text inside items */
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column; /* Ensure icons and labels are in a column */
+  align-items: center;
+  margin: 0 10px; /* Optional: add some horizontal margin between items */
+}
+
+.icon {
+  font-size: 24px; /* Ensure the icons are large enough */
+  margin-bottom: 5px; /* Add space between icon and text */
+}
+
+.text-lg {
+  font-size: 22px;
+  font-weight: bold;
+}
