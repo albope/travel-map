@@ -47,7 +47,8 @@ body {
 
 .map-container {
   margin: 0 auto;
-  width: 80%;
+  width: 100%; /* Ensure full width usage */
+  max-width: 1000px; /* Optional: limit max width */
   height: 600px; /* Adjust as necessary */
   margin-bottom: 20px;
   background-color: white; /* White background for the map */
@@ -65,7 +66,8 @@ body {
 
 .country-selector-container {
   margin: 0 auto;
-  width: 80%;
+  width: 100%; /* Ensure full width usage */
+  max-width: 1000px; /* Optional: limit max width */
   text-align: left;
   background-color: white;
   border-radius: 8px;

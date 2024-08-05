@@ -1,5 +1,5 @@
 // src/components/MapComponent.jsx
-import React, { useEffect } from "react";
+import React from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import countriesData from "../data/world-110m.json";
@@ -35,13 +35,24 @@ const MapComponent = ({ selectedCountries }) => {
     });
   };
 
+  // Establecer los límites para que el mapa sea visible
+  const worldBounds = [
+    [-60, -180], // Suroeste
+    [85, 180],   // Noreste
+  ];
+
   return (
-    <div className="map-wrapper">
+    <div className="map-wrapper" style={{ overflow: "hidden", padding: 0 }}>
       <MapContainer
         center={[20, 0]}
         zoom={2}
-        style={{ height: "500px", width: "100%" }}
+        style={{ height: "600px", width: "100%", margin: 0, padding: 0 }}
         className="leaflet-container"
+        minZoom={2}
+        maxZoom={5}
+        scrollWheelZoom={true}
+        maxBounds={worldBounds} // Usar límites del mundo para que el mapa se recorte correctamente
+        maxBoundsViscosity={1.0} // Viscosidad para mantener el mapa dentro de los límites
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
