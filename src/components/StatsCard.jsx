@@ -3,7 +3,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faPlane } from '@fortawesome/free-solid-svg-icons';
 
-const StatsCard = ({ continents, countries, percentage }) => {
+const StatsCard = ({ continents, countries, percentage, visitedCountries }) => {
   return (
     <div className="stats-container">
       {/* Continents */}
@@ -29,6 +29,15 @@ const StatsCard = ({ continents, countries, percentage }) => {
           <span className="text-lg font-semibold">Visited:</span>
           <span className="text-lg ml-1">{percentage}%</span>
         </div>
+      </div>
+      {/* Visited Countries List */}
+      <div className="visited-countries-list">
+        <h3 className="font-semibold mt-4">Visited Countries:</h3>
+        <ul>
+          {visitedCountries.map((country, index) => (
+            <li key={index} className="text-sm">{country}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );

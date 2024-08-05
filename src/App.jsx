@@ -209,13 +209,11 @@ const TOTAL_COUNTRIES = 195;
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
 
-  // Función para manejar la selección de países
   const handleCountrySelect = (countries) => {
     setSelectedCountries(countries);
     console.log("Actualización de países seleccionados en App:", countries);
   };
 
-  // Calcular el número de continentes visitados
   const getVisitedContinents = () => {
     const visitedContinents = new Set(
       selectedCountries.map((country) => continentMapping[country])
@@ -223,12 +221,10 @@ const App = () => {
     return visitedContinents.size;
   };
 
-  // Calcular el número total de países visitados
   const getVisitedCountriesCount = () => {
     return selectedCountries.length;
   };
 
-  // Calcular el porcentaje de países visitados respecto al total de países del mundo
   const getVisitedPercentage = () => {
     return ((selectedCountries.length / TOTAL_COUNTRIES) * 100).toFixed(2);
   };
@@ -264,6 +260,7 @@ const App = () => {
             continents={getVisitedContinents()}
             countries={getVisitedCountriesCount()}
             percentage={getVisitedPercentage()}
+            visitedCountries={selectedCountries} // Pasamos los países visitados
           />
         </div>
         <div className="country-selector-container">

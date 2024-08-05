@@ -154,3 +154,21 @@ footer {
   font-size: 22px;
   font-weight: bold;
 }
+.visited-countries-list {
+  text-align: left;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.visited-countries-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.visited-countries-list li {
+  margin: 5px 0;
+  padding: 2px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
