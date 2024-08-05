@@ -130,12 +130,13 @@ footer {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 20px 30px; /* Increase horizontal padding for better separation */
   margin-bottom: 20px; /* Add margin to separate it from the map */
   display: flex;
-  justify-content: space-around; /* Distribute space between items */
-  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Distribute space between items */
+  align-items: flex-start; /* Align items at the top */
   text-align: center; /* Center text inside items */
+  gap: 30px; /* Add gap between flex items for better spacing */
 }
 
 .stat-item {
@@ -154,11 +155,18 @@ footer {
   font-size: 22px;
   font-weight: bold;
 }
+
 .visited-countries-list {
   text-align: left;
   margin-top: 10px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 300px; /* Optional: limit max width of the list */
+  padding-left: 20px; /* Add padding to separate list from other items */
+  border-left: 1px solid #e0e0e0; /* Add a left border to visually separate the list */
+}
+
+.visited-countries-list h3 {
+  margin-bottom: 10px; /* Add margin to separate the title from the list */
 }
 
 .visited-countries-list ul {
@@ -170,5 +178,6 @@ footer {
 .visited-countries-list li {
   margin: 5px 0;
   padding: 2px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0; /* Add a bottom border for separation */
+  font-size: 16px; /* Adjust font size for better readability */
 }
