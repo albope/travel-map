@@ -198,3 +198,64 @@ footer {
   border-bottom: 1px solid #f0f0f0;
   font-size: 16px;
 }
+.about-container {
+  background-color: white;
+  padding: 40px;  /* Increased padding for better spacing */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.about-container h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;  /* Increased bottom margin */
+}
+
+.about-container p {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 30px;  /* Increased bottom margin */
+  line-height: 1.6;  /* Added line-height for better readability */
+}
+
+.about-container .links {
+  margin-bottom: 20px;  /* Space below links section */
+}
+
+.about-container .links a {
+  display: inline-block;
+  margin: 0 15px;
+  font-size: 18px;
+  text-decoration: none;
+  color: black; /* Text link color */
+  transition: color 0.3s;
+  font-weight: bold;  /* Make links bold for better emphasis */
+  border-bottom: 2px solid transparent; /* Add underline on hover */
+}
+
+.about-container .links a:hover {
+  color: #555; /* Hover color */
+  border-bottom: 2px solid #555; /* Visible underline on hover */
+}
+
+.about-container .contact p {
+  font-size: 18px;
+  color: #333333;
+  margin-bottom: 20px;  /* Space below each contact item */
+}
+
+.email-link {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;  /* Bold email for clarity */
+  transition: color 0.3s, border-bottom 0.3s; /* Smooth transitions */
+  border-bottom: 2px solid transparent;
+}
+
+.email-link:hover {
+  color: #555;  /* Email link hover color */
+  border-bottom: 2px solid #555;
+}

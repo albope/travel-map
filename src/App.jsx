@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import MapComponent from "./components/MapComponent";
 import CountrySelector from "./components/CountrySelector";
 import StatsCard from "./components/StatsCard"; // Importar StatsCard
+import About from "./components/About"; // Importar About
 import "./index.css";
 
 // Mapeo manual de países a continentes
@@ -208,6 +209,7 @@ const TOTAL_COUNTRIES = 195;
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const [currentPage, setCurrentPage] = useState('map'); // Estado para la página actual
 
   const handleCountrySelect = (countries) => {
     setSelectedCountries(countries);
@@ -240,35 +242,41 @@ const App = () => {
             <span>Travel-Map Generator</span>
           </div>
           <div className="nav-links">
-            <a href="#about">About</a>
-            <a href="#pdf-generator">PDF Generator</a>
+            <a href="#" onClick={() => setCurrentPage('about')}>About</a> {/* Enlace al About */}
+            <a href="#" onClick={() => setCurrentPage('map')}>Map Generator</a> {/* Enlace al Generador de Mapas */}
           </div>
         </nav>
       </header>
       <main className="main">
-        <h1 className="main-title">Travel. Select. Generate.</h1>
-        <p className="main-description">
-          Create a personalized travel map showcasing the countries you've
-          visited. Share your adventures with friends and plan your next
-          destination!
-        </p>
-        <div className="map-container">
-          <MapComponent selectedCountries={selectedCountries} />
-        </div>
-        <div className="stats-container">
-          <StatsCard
-            continents={getVisitedContinents()}
-            countries={getVisitedCountriesCount()}
-            percentage={getVisitedPercentage()}
-            visitedCountries={selectedCountries} // Pasamos los países visitados
-          />
-        </div>
-        <div className="country-selector-container">
-          <CountrySelector
-            onCountrySelect={handleCountrySelect}
-            selectedCountries={selectedCountries}
-          />
-        </div>
+        {currentPage === 'map' ? (
+          <>
+            <h1 className="main-title">Travel. Select. Generate.</h1>
+            <p className="main-description">
+              Create a personalized travel map showcasing the countries you've
+              visited. Share your adventures with friends and plan your next
+              destination!
+            </p>
+            <div className="map-container">
+              <MapComponent selectedCountries={selectedCountries} />
+            </div>
+            <div className="stats-container">
+              <StatsCard
+                continents={getVisitedContinents()}
+                countries={getVisitedCountriesCount()}
+                percentage={getVisitedPercentage()}
+                visitedCountries={selectedCountries} // Pasamos los países visitados
+              />
+            </div>
+            <div className="country-selector-container">
+              <CountrySelector
+                onCountrySelect={handleCountrySelect}
+                selectedCountries={selectedCountries}
+              />
+            </div>
+          </>
+        ) : (
+          <About /> // Renderizar la sección About solo si se selecciona
+        )}
       </main>
       <footer>
         <p>
