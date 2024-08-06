@@ -1,0 +1,69 @@
+/* styles/HamburgerMenu.css */
+.hamburger-menu {
+  position: relative;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.menu-links {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.menu-links a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 5px 0;
+  padding: 5px 10px;
+  transition: background-color 0.3s;
+}
+
+.menu-links a:hover {
+  background-color: #444;
+}
+
+/* Estilos para About */
+.about {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.about h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.about p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.about a {
+  color: black;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.about a:hover {
+  color: #007bff;
+}
+
+.about .contact {
+  margin-top: 20px;
+}

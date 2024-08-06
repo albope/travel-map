@@ -1,9 +1,11 @@
 // App.jsx
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import MapComponent from "./components/MapComponent";
 import CountrySelector from "./components/CountrySelector";
-import StatsCard from "./components/StatsCard"; // Importar StatsCard
-import About from "./components/About"; // Importar About
+import StatsCard from "./components/StatsCard";
+import About from "./components/About";
+import HamburgerMenu from "./components/HamburgerMenu";
 import "./index.css";
 
 // Mapeo manual de países a continentes
@@ -204,16 +206,13 @@ const continentMapping = {
   "Zimbabwe": "Africa",
 };
 
-// Cantidad total de países
-const TOTAL_COUNTRIES = 195;
+const TOTAL_COUNTRIES = 195; // Total de países
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
-  const [currentPage, setCurrentPage] = useState('map'); // Estado para la página actual
 
   const handleCountrySelect = (countries) => {
     setSelectedCountries(countries);
-    console.log("Actualización de países seleccionados en App:", countries);
   };
 
   const getVisitedContinents = () => {
@@ -232,58 +231,59 @@ const App = () => {
   };
 
   return (
-    <div>
-      <header className="header">
-        <nav className="navbar">
-          <div className="logo">
-            <span role="img" aria-label="globo">
-              🌍
-            </span>
-            <span>Travel-Map Generator</span>
-          </div>
-          <div className="nav-links">
-            <a href="#" onClick={() => setCurrentPage('about')}>About</a> {/* Enlace al About */}
-            <a href="#" onClick={() => setCurrentPage('map')}>Map Generator</a> {/* Enlace al Generador de Mapas */}
-          </div>
-        </nav>
-      </header>
-      <main className="main">
-        {currentPage === 'map' ? (
-          <>
-            <h1 className="main-title">Travel. Select. Generate.</h1>
-            <p className="main-description">
-              Create a personalized travel map showcasing the countries you've
-              visited. Share your adventures with friends and plan your next
-              destination!
-            </p>
-            <div className="map-container">
-              <MapComponent selectedCountries={selectedCountries} />
+    <Router>
+      <div>
+        <header className="header">
+          <nav className="navbar">
+            <div className="logo">
+              <span role="img" aria-label="globo">
+                🌍
+              </span>
+              <span>Map Generator</span>
             </div>
-            <div className="stats-container">
-              <StatsCard
-                continents={getVisitedContinents()}
-                countries={getVisitedCountriesCount()}
-                percentage={getVisitedPercentage()}
-                visitedCountries={selectedCountries} // Pasamos los países visitados
-              />
-            </div>
-            <div className="country-selector-container">
-              <CountrySelector
-                onCountrySelect={handleCountrySelect}
-                selectedCountries={selectedCountries}
-              />
-            </div>
-          </>
-        ) : (
-          <About /> // Renderizar la sección About solo si se selecciona
-        )}
-      </main>
-      <footer>
-        <p>
-          Made with <span style={{ color: "red" }}>❤</span> by Alberto Bort
-        </p>
-      </footer>
-    </div>
+            <HamburgerMenu />
+          </nav>
+        </header>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <main className="main">
+                <section id="map-generator">
+                  <h1 className="main-title">Travel. Select. Generate.</h1>
+                  <p className="main-description">
+                    Create a personalized travel map showcasing the countries you've visited. Share your adventures with friends and plan your next destination!
+                  </p>
+                  <div className="map-container">
+                    <MapComponent selectedCountries={selectedCountries} />
+                  </div>
+                  <div className="stats-container">
+                    <StatsCard
+                      continents={getVisitedContinents()}
+                      countries={getVisitedCountriesCount()}
+                      percentage={getVisitedPercentage()}
+                      visitedCountries={selectedCountries}
+                    />
+                  </div>
+                  <div className="country-selector-container">
+                    <CountrySelector
+                      onCountrySelect={handleCountrySelect}
+                      selectedCountries={selectedCountries}
+                    />
+                  </div>
+                </section>
+              </main>
+            }
+          />
+          <Route path="/about" element={<About />} /> {/* Ruta para la página About */}
+        </Routes>
+        <footer>
+          <p>
+            Made with <span style={{ color: "red" }}>❤</span> by Alberto Bort
+          </p>
+        </footer>
+      </div>
+    </Router>
   );
 };
 
