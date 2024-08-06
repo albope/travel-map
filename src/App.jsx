@@ -239,7 +239,7 @@ const App = () => {
               <span role="img" aria-label="globo">
                 🌍
               </span>
-              <span>Map Generator</span>
+              <span>Travel-map generator</span>
             </div>
             <HamburgerMenu />
           </nav>
