@@ -6,7 +6,7 @@ import CountrySelector from "./components/CountrySelector";
 import StatsCard from "./components/StatsCard";
 import About from "./components/About";
 import HamburgerMenu from "./components/HamburgerMenu";
-import html2canvas from "html2canvas";
+import domtoimage from "dom-to-image";
 import "./index.css";
 
 // Mapeo manual de países a continentes
@@ -207,8 +207,7 @@ const continentMapping = {
   "Zimbabwe": "Africa",
 };
 
-// Cantidad total de países
-const TOTAL_COUNTRIES = 195;
+const TOTAL_COUNTRIES = 195; // Total de países
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
@@ -241,8 +240,8 @@ const App = () => {
       tempContainer.style.border = "2px solid black"; // Línea fina negra
       tempContainer.style.backgroundColor = "white";
       tempContainer.style.position = "relative"; // Asegurar que los elementos absolutos se posicionen correctamente
-      tempContainer.style.width = mapElement.offsetWidth + "px"; // Ajuste del ancho
-      tempContainer.style.height = mapElement.offsetHeight + "px"; // Ajuste de la altura
+      tempContainer.style.width = "1400px"; // Ajuste del ancho manual
+      tempContainer.style.height = "1000px"; // Ajuste del alto manual
       tempContainer.style.overflow = "hidden"; // Asegurar que no haya desbordamiento
 
       const title = document.createElement("h1");
@@ -253,27 +252,30 @@ const App = () => {
 
       // Clonar el mapa y agregarlo al contenedor temporal
       const mapClone = mapElement.cloneNode(true);
-      mapClone.style.width = "100%"; // Ajustar el ancho del mapa clonado
-      mapClone.style.height = "auto"; // Mantener la proporción del mapa clonado
+      mapClone.style.width = "1400px"; // Ajuste del ancho del mapa clonado manualmente
+      mapClone.style.height = "900px"; // Ajuste del alto del mapa clonado manualmente
+      mapClone.style.position = "absolute"; // Asegurar que el mapa clonado esté bien posicionado
+      mapClone.style.top = "50px"; // Mover los países hacia abajo
       tempContainer.appendChild(mapClone);
 
       const legend = document.createElement("div");
       legend.style.position = "absolute";
-      legend.style.bottom = "10px";
-      legend.style.right = "10px";
+      legend.style.bottom = "20px"; // Ajuste de la posición inferior para que esté alineado correctamente
+      legend.style.right = "20px";
       legend.style.backgroundColor = "white";
       legend.style.border = "1px solid black";
       legend.style.padding = "5px";
+      legend.style.display = "flex";
+      legend.style.flexDirection = "column";
+      legend.style.alignItems = "flex-start";
       legend.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-          <div style="display: flex; align-items: center; margin-bottom: 5px;">
-            <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
-            <span>Visited</span>
-          </div>
-          <div style="display: flex; align-items: center;">
-            <div style="width: 20px; height: 20px; background-color: #3388ff; margin-right: 5px;"></div>
-            <span>Not Visited</span>
-          </div>
+        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+          <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
+          <span>Visited</span>
+        </div>
+        <div style="display: flex; align-items: center;">
+          <div style="width: 20px; height: 20px; background-color: #3388ff; margin-right: 5px;"></div>
+          <span>Not Visited</span>
         </div>
       `;
       tempContainer.appendChild(legend);
@@ -286,14 +288,25 @@ const App = () => {
         zoomControls.style.display = "none";
       }
 
-      html2canvas(tempContainer).then((canvas) => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "Countries_visited.png";
-        link.click();
+      // Ocultar la marca de Leaflet antes de capturar la imagen
+      const attribution = tempContainer.querySelector(".leaflet-control-attribution");
+      if (attribution) {
+        attribution.style.display = "none";
+      }
 
-        document.body.removeChild(tempContainer);
-      });
+      domtoimage.toPng(tempContainer)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "Countries_visited.png";
+          link.click();
+
+          document.body.removeChild(tempContainer);
+        })
+        .catch((error) => {
+          console.error("Error generating image:", error);
+          document.body.removeChild(tempContainer);
+        });
     }
   };
 
