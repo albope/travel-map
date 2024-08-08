@@ -243,25 +243,28 @@ const App = () => {
       tempContainer.style.width = "1400px"; // Ajuste del ancho manual
       tempContainer.style.height = "1000px"; // Ajuste del alto manual
       tempContainer.style.overflow = "hidden"; // Asegurar que no haya desbordamiento
-
+      tempContainer.style.display = "flex";
+      tempContainer.style.flexDirection = "column";
+      tempContainer.style.alignItems = "center"; // Centrar el contenido horizontalmente
+  
       const title = document.createElement("h1");
       title.textContent = "My Travel Map";
       title.style.textAlign = "center";
-      title.style.marginBottom = "10px";
+      title.style.marginBottom = "20px"; // Añadir espacio entre el título y el mapa
       tempContainer.appendChild(title);
-
+  
       // Clonar el mapa y agregarlo al contenedor temporal
       const mapClone = mapElement.cloneNode(true);
-      mapClone.style.width = "1400px"; // Ajuste del ancho del mapa clonado manualmente
-      mapClone.style.height = "900px"; // Ajuste del alto del mapa clonado manualmente
-      mapClone.style.position = "absolute"; // Asegurar que el mapa clonado esté bien posicionado
-      mapClone.style.top = "50px"; // Mover los países hacia abajo
+      mapClone.style.width = "1300px"; // Ajuste del ancho del mapa clonado manualmente
+      mapClone.style.height = "700px"; // Ajuste del alto del mapa clonado manualmente
+      mapClone.style.position = "relative"; // Asegurar que el mapa clonado esté bien posicionado
+      mapClone.style.marginBottom = "20px"; // Añadir espacio entre el mapa y la leyenda
       tempContainer.appendChild(mapClone);
-
+  
       const legend = document.createElement("div");
       legend.style.position = "absolute";
-      legend.style.bottom = "20px"; // Ajuste de la posición inferior para que esté alineado correctamente
-      legend.style.right = "20px";
+      legend.style.top = "500px"; // Ajustar la posición top
+      legend.style.left = "50px"; // Ajustar la posición left
       legend.style.backgroundColor = "white";
       legend.style.border = "1px solid black";
       legend.style.padding = "5px";
@@ -279,28 +282,28 @@ const App = () => {
         </div>
       `;
       tempContainer.appendChild(legend);
-
+  
       document.body.appendChild(tempContainer);
-
+  
       // Ocultar los controles de zoom antes de capturar la imagen
       const zoomControls = tempContainer.querySelector(".leaflet-control-zoom");
       if (zoomControls) {
         zoomControls.style.display = "none";
       }
-
+  
       // Ocultar la marca de Leaflet antes de capturar la imagen
       const attribution = tempContainer.querySelector(".leaflet-control-attribution");
       if (attribution) {
         attribution.style.display = "none";
       }
-
+  
       domtoimage.toPng(tempContainer)
         .then((dataUrl) => {
           const link = document.createElement("a");
           link.href = dataUrl;
           link.download = "Countries_visited.png";
           link.click();
-
+  
           document.body.removeChild(tempContainer);
         })
         .catch((error) => {
@@ -309,7 +312,7 @@ const App = () => {
         });
     }
   };
-
+    
   return (
     <Router>
       <div>
