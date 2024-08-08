@@ -259,3 +259,52 @@ footer {
   color: #555;  /* Email link hover color */
   border-bottom: 2px solid #555;
 }
+
+.download-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+
+.temp-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.temp-container .legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.temp-container .legend div {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.temp-container .legend div div {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.temp-container .legend .visited {
+  background-color: #00f;
+}
+
+.temp-container .legend .not-visited {
+  background-color: #ccc;
+}

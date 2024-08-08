@@ -1,11 +1,12 @@
 // App.jsx
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import MapComponent from "./components/MapComponent";
 import CountrySelector from "./components/CountrySelector";
 import StatsCard from "./components/StatsCard";
 import About from "./components/About";
 import HamburgerMenu from "./components/HamburgerMenu";
+import html2canvas from "html2canvas";
 import "./index.css";
 
 // Mapeo manual de países a continentes
@@ -210,6 +211,7 @@ const TOTAL_COUNTRIES = 195; // Total de países
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const mapRef = useRef(null);
 
   const handleCountrySelect = (countries) => {
     setSelectedCountries(countries);
@@ -228,6 +230,56 @@ const App = () => {
 
   const getVisitedPercentage = () => {
     return ((selectedCountries.length / TOTAL_COUNTRIES) * 100).toFixed(2);
+  };
+
+  const handleDownload = () => {
+    const mapElement = mapRef.current;
+    if (mapElement) {
+      // Crear un nuevo contenedor temporal para el mapa con el título y la leyenda
+      const tempContainer = document.createElement("div");
+      tempContainer.style.border = "2px solid black";
+      tempContainer.style.padding = "10px";
+      tempContainer.style.backgroundColor = "white";
+      tempContainer.style.display = "flex";
+      tempContainer.style.flexDirection = "column";
+      tempContainer.style.alignItems = "center";
+
+      const title = document.createElement("h1");
+      title.textContent = "My Travel Map";
+      title.style.textAlign = "center";
+      title.style.marginBottom = "20px";
+      tempContainer.appendChild(title);
+
+      const legend = document.createElement("div");
+      legend.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; margin-right: 20px;">
+            <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
+            <span>Visited</span>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <div style="width: 20px; height: 20px; background-color: rgba(0, 0, 255, 0.2); margin-right: 5px;"></div>
+            <span>Not Visited</span>
+          </div>
+        </div>
+      `;
+      tempContainer.appendChild(legend);
+
+      // Clonar el mapa y agregarlo al contenedor temporal
+      const mapClone = mapElement.cloneNode(true);
+      tempContainer.appendChild(mapClone);
+
+      document.body.appendChild(tempContainer);
+
+      html2canvas(tempContainer).then((canvas) => {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "Countries_visited.png";
+        link.click();
+
+        document.body.removeChild(tempContainer);
+      });
+    }
   };
 
   return (
@@ -252,9 +304,9 @@ const App = () => {
                 <section id="map-generator">
                   <h1 className="main-title">Travel. Select. Generate.</h1>
                   <p className="main-description">
-                    Create a personalized travel map showcasing the countries you've visited. Share your adventures with friends and plan your next destination!
+                    Create a personalized travel map showcasing the countries you've visited marking them in the 'Countries I have been to..' section. Share your adventures with friends and plan your next destination!
                   </p>
-                  <div className="map-container">
+                  <div className="map-container" ref={mapRef}>
                     <MapComponent selectedCountries={selectedCountries} />
                   </div>
                   <div className="stats-container">
@@ -271,6 +323,9 @@ const App = () => {
                       selectedCountries={selectedCountries}
                     />
                   </div>
+                  <button className="download-button" onClick={handleDownload}>
+                    Download Map
+                  </button>
                 </section>
               </main>
             }
