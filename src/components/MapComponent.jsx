@@ -42,7 +42,7 @@ const MapComponent = ({ selectedCountries }) => {
   ];
 
   return (
-    <div className="map-wrapper" style={{ overflow: "hidden", padding: 0 }}>
+    <div id="map-container" className="map-wrapper" style={{ overflow: "hidden", padding: 0 }}>
       <MapContainer
         center={[20, 0]}
         zoom={2}

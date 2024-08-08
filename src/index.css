@@ -261,8 +261,8 @@ footer {
 }
 
 .download-button {
-  display: block;
-  margin: 20px auto;
+  display: inline-block;
+  margin: 20px;
   padding: 10px 20px;
   font-size: 16px;
   color: white;
@@ -270,11 +270,36 @@ footer {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  text-align: center;
 }
 
 .download-button:hover {
   background-color: #0056b3;
+}
+
+.map-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.map-legend {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.map-legend span {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.map-legend i {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border: 1px solid #000;
 }
 
 .temp-container h1 {

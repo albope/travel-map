@@ -207,7 +207,8 @@ const continentMapping = {
   "Zimbabwe": "Africa",
 };
 
-const TOTAL_COUNTRIES = 195; // Total de países
+// Cantidad total de países
+const TOTAL_COUNTRIES = 195;
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
@@ -237,39 +238,53 @@ const App = () => {
     if (mapElement) {
       // Crear un nuevo contenedor temporal para el mapa con el título y la leyenda
       const tempContainer = document.createElement("div");
-      tempContainer.style.border = "2px solid black";
-      tempContainer.style.padding = "10px";
+      tempContainer.style.border = "2px solid black"; // Línea fina negra
       tempContainer.style.backgroundColor = "white";
-      tempContainer.style.display = "flex";
-      tempContainer.style.flexDirection = "column";
-      tempContainer.style.alignItems = "center";
+      tempContainer.style.position = "relative"; // Asegurar que los elementos absolutos se posicionen correctamente
+      tempContainer.style.width = mapElement.offsetWidth + "px"; // Ajuste del ancho
+      tempContainer.style.height = mapElement.offsetHeight + "px"; // Ajuste de la altura
+      tempContainer.style.overflow = "hidden"; // Asegurar que no haya desbordamiento
 
       const title = document.createElement("h1");
       title.textContent = "My Travel Map";
       title.style.textAlign = "center";
-      title.style.marginBottom = "20px";
+      title.style.marginBottom = "10px";
       tempContainer.appendChild(title);
 
+      // Clonar el mapa y agregarlo al contenedor temporal
+      const mapClone = mapElement.cloneNode(true);
+      mapClone.style.width = "100%"; // Ajustar el ancho del mapa clonado
+      mapClone.style.height = "auto"; // Mantener la proporción del mapa clonado
+      tempContainer.appendChild(mapClone);
+
       const legend = document.createElement("div");
+      legend.style.position = "absolute";
+      legend.style.bottom = "10px";
+      legend.style.right = "10px";
+      legend.style.backgroundColor = "white";
+      legend.style.border = "1px solid black";
+      legend.style.padding = "5px";
       legend.innerHTML = `
-        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
-          <div style="display: flex; align-items: center; margin-right: 20px;">
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div style="display: flex; align-items: center; margin-bottom: 5px;">
             <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
             <span>Visited</span>
           </div>
           <div style="display: flex; align-items: center;">
-            <div style="width: 20px; height: 20px; background-color: rgba(0, 0, 255, 0.2); margin-right: 5px;"></div>
+            <div style="width: 20px; height: 20px; background-color: #3388ff; margin-right: 5px;"></div>
             <span>Not Visited</span>
           </div>
         </div>
       `;
       tempContainer.appendChild(legend);
 
-      // Clonar el mapa y agregarlo al contenedor temporal
-      const mapClone = mapElement.cloneNode(true);
-      tempContainer.appendChild(mapClone);
-
       document.body.appendChild(tempContainer);
+
+      // Ocultar los controles de zoom antes de capturar la imagen
+      const zoomControls = tempContainer.querySelector(".leaflet-control-zoom");
+      if (zoomControls) {
+        zoomControls.style.display = "none";
+      }
 
       html2canvas(tempContainer).then((canvas) => {
         const link = document.createElement("a");
