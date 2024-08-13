@@ -16,6 +16,7 @@ export default defineConfig({
     },
   },
   server: {
+    port: 5173,
     open: true, // Abre automáticamente en el navegador
   },
 });
