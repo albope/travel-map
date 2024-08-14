@@ -21,6 +21,7 @@ const HamburgerMenu = () => {
         <div className="menu-links">
           <Link to="/" onClick={toggleMenu}>Map Generator</Link>
           <Link to="/about" onClick={toggleMenu}>About</Link>
+          <Link to="/blog" onClick={toggleMenu}>Blog</Link> {/* Enlace añadido al blog */}
         </div>
       )}
     </div>

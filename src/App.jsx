@@ -6,6 +6,8 @@ import CountrySelector from "./components/CountrySelector";
 import StatsCard from "./components/StatsCard";
 import About from "./components/About";
 import HamburgerMenu from "./components/HamburgerMenu";
+import Blog from "./components/Blog"; // Importa el componente Blog
+import BlogPost from "./components/BlogPost"; // Importa el componente BlogPost
 import domtoimage from "dom-to-image";
 import "./index.css";
 
@@ -364,6 +366,8 @@ const App = () => {
             }
           />
           <Route path="/about" element={<About />} /> {/* Ruta para la página About */}
+          <Route path="/blog" element={<Blog />} /> {/* Ruta para la página Blog */}
+          <Route path="/blog/:id" element={<BlogPost />} />
         </Routes>
         <footer>
           <p>
