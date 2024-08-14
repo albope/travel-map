@@ -18,7 +18,7 @@ const About = () => {
         <a href="https://github.com/albope/travel-map" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={faGithub} /> <span className="link-text">GitHub Repository</span>
         </a>
-        <a href="https://linkedin.com/in/alberto-bort" target="_blank" rel="noopener noreferrer">
+        <a href="https://linkedin.com/in/albertobort" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={faLinkedin} /> <span className="link-text">LinkedIn Profile</span>
         </a>
       </div>
