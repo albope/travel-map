@@ -1,7 +1,8 @@
 // src/components/CountrySelector.jsx
 import React, { useState } from "react";
-import { Tabs, Tab, Box, Checkbox, FormControlLabel } from "@mui/material";
+import { Tabs, Tab, Box, Checkbox, FormControlLabel, Button } from "@mui/material";
 import countriesData from "../data/world-110m.json";
+import './CountrySelector.css';
 
 // Mapeo manual de países a continentes
 const continentMapping = {
@@ -289,9 +290,13 @@ const CountrySelector = ({ onCountrySelect, selectedCountries }) => {
     return countries;
   };
 
+  const handleUnmarkAll = () => {
+    onCountrySelect([]);
+  };
+
   return (
     <div className="country-selector">
-      <h2 className="country-selector-title">Countries I have been to..</h2> {/* Añadir título aquí */}
+      <h2 className="country-selector-title">Countries I have been to..</h2>
       <Tabs value={value} onChange={handleTabChange} aria-label="country tabs">
         {continents.map((continent, index) => (
           <Tab key={continent} label={continent} id={`tab-${index}`} />
@@ -316,6 +321,14 @@ const CountrySelector = ({ onCountrySelect, selectedCountries }) => {
           </div>
         </TabPanel>
       ))}
+<Button
+  variant="contained"
+  color="primary"
+  onClick={handleUnmarkAll}
+  style={{ marginTop: "20px" }}
+>
+  Unmark All Countries
+</Button>
     </div>
   );
 };

@@ -1,0 +1,17 @@
+.unmark-button {
+    background-color: #007bff; /* Color azul del botón Download Map */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+  
+  .unmark-button:hover {
+    background-color: #0056b3; /* Un azul más oscuro para el hover */
+  }
+  
