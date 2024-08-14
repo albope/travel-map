@@ -235,84 +235,86 @@ const App = () => {
   const handleDownload = () => {
     const mapElement = mapRef.current;
     if (mapElement) {
-      // Crear un nuevo contenedor temporal para el mapa con el título y la leyenda
-      const tempContainer = document.createElement("div");
-      tempContainer.style.border = "2px solid black"; // Línea fina negra
-      tempContainer.style.backgroundColor = "white";
-      tempContainer.style.position = "relative"; // Asegurar que los elementos absolutos se posicionen correctamente
-      tempContainer.style.width = "1400px"; // Ajuste del ancho manual
-      tempContainer.style.height = "1000px"; // Ajuste del alto manual
-      tempContainer.style.overflow = "hidden"; // Asegurar que no haya desbordamiento
-      tempContainer.style.display = "flex";
-      tempContainer.style.flexDirection = "column";
-      tempContainer.style.alignItems = "center"; // Centrar el contenido horizontalmente
-  
-      const title = document.createElement("h1");
-      title.textContent = "My Travel Map";
-      title.style.textAlign = "center";
-      title.style.marginBottom = "20px"; // Añadir espacio entre el título y el mapa
-      tempContainer.appendChild(title);
-  
-      // Clonar el mapa y agregarlo al contenedor temporal
-      const mapClone = mapElement.cloneNode(true);
-      mapClone.style.width = "1300px"; // Ajuste del ancho del mapa clonado manualmente
-      mapClone.style.height = "700px"; // Ajuste del alto del mapa clonado manualmente
-      mapClone.style.position = "relative"; // Asegurar que el mapa clonado esté bien posicionado
-      mapClone.style.marginBottom = "20px"; // Añadir espacio entre el mapa y la leyenda
-      tempContainer.appendChild(mapClone);
-  
-      const legend = document.createElement("div");
-      legend.style.position = "absolute";
-      legend.style.top = "500px"; // Ajustar la posición top
-      legend.style.left = "50px"; // Ajustar la posición left
-      legend.style.backgroundColor = "white";
-      legend.style.border = "1px solid black";
-      legend.style.padding = "5px";
-      legend.style.display = "flex";
-      legend.style.flexDirection = "column";
-      legend.style.alignItems = "flex-start";
-      legend.innerHTML = `
-        <div style="display: flex; align-items: center; margin-bottom: 5px;">
-          <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
-          <span>Visited</span>
-        </div>
-        <div style="display: flex; align-items: center;">
-          <div style="width: 20px; height: 20px; background-color: #3388ff; margin-right: 5px;"></div>
-          <span>Not Visited</span>
-        </div>
-      `;
-      tempContainer.appendChild(legend);
-  
-      document.body.appendChild(tempContainer);
-  
-      // Ocultar los controles de zoom antes de capturar la imagen
-      const zoomControls = tempContainer.querySelector(".leaflet-control-zoom");
-      if (zoomControls) {
-        zoomControls.style.display = "none";
-      }
-  
-      // Ocultar la marca de Leaflet antes de capturar la imagen
-      const attribution = tempContainer.querySelector(".leaflet-control-attribution");
-      if (attribution) {
-        attribution.style.display = "none";
-      }
-  
-      domtoimage.toPng(tempContainer)
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "Countries_visited.png";
-          link.click();
-  
-          document.body.removeChild(tempContainer);
-        })
-        .catch((error) => {
-          console.error("Error generating image:", error);
-          document.body.removeChild(tempContainer);
-        });
-    }
-  };
+        // Crear un nuevo contenedor temporal para el mapa con el título y la leyenda
+        const tempContainer = document.createElement("div");
+        tempContainer.style.border = "2px solid black";
+        tempContainer.style.backgroundColor = "white";
+        tempContainer.style.position = "relative";
+        tempContainer.style.width = "1400px";
+        tempContainer.style.height = "auto";
+        tempContainer.style.overflow = "hidden";
+        tempContainer.style.display = "flex";
+        tempContainer.style.flexDirection = "column";
+        tempContainer.style.alignItems = "center";
     
+        const title = document.createElement("h1");
+        title.textContent = "My Travel Map";
+        title.style.textAlign = "center";
+        title.style.marginBottom = "20px";
+        tempContainer.appendChild(title);
+    
+        const subtitle = document.createElement("p");
+        subtitle.innerHTML = `You have visited <span style="font-weight: bold;">${getVisitedPercentage()}%</span> of the world!`;
+        subtitle.style.marginBottom = "20px";
+        tempContainer.appendChild(subtitle);
+    
+        // Clonar el mapa y agregarlo al contenedor temporal
+        const mapClone = mapElement.cloneNode(true);
+        mapClone.style.width = "1300px";
+        mapClone.style.height = "600px"; // Ajustar la altura del mapa clonado para eliminar espacio en blanco
+        mapClone.style.position = "relative";
+        mapClone.style.marginBottom = "10px"; // Ajuste del margen inferior
+        tempContainer.appendChild(mapClone);
+    
+        // Añadir la lista de países visitados en el área marcada en rojo (debajo del mapa)
+        const visitedCountriesContainer = document.createElement("div");
+        visitedCountriesContainer.style.padding = "10px";
+        visitedCountriesContainer.style.width = "1300px";
+        visitedCountriesContainer.style.textAlign = "center";
+        visitedCountriesContainer.style.fontSize = "14px";
+        visitedCountriesContainer.style.position = "relative";
+        visitedCountriesContainer.style.top = "-20px"; // Ajuste para que quede bien debajo del mapa
+    
+        const visitedCountriesTitle = document.createElement("h3");
+        visitedCountriesTitle.textContent = "Countries You Have Visited:";
+        visitedCountriesContainer.appendChild(visitedCountriesTitle);
+    
+        const visitedCountriesList = document.createElement("p");
+        visitedCountriesList.textContent = selectedCountries.join(", ");
+        visitedCountriesContainer.appendChild(visitedCountriesList);
+    
+        tempContainer.appendChild(visitedCountriesContainer);
+    
+        document.body.appendChild(tempContainer);
+    
+        // Ocultar los controles de zoom antes de capturar la imagen
+        const zoomControls = tempContainer.querySelector(".leaflet-control-zoom");
+        if (zoomControls) {
+            zoomControls.style.display = "none";
+        }
+    
+        // Ocultar la marca de Leaflet antes de capturar la imagen
+        const attribution = tempContainer.querySelector(".leaflet-control-attribution");
+        if (attribution) {
+            attribution.style.display = "none";
+        }
+    
+        domtoimage.toPng(tempContainer)
+            .then((dataUrl) => {
+                const link = document.createElement("a");
+                link.href = dataUrl;
+                link.download = "Countries_visited.png";
+                link.click();
+    
+                document.body.removeChild(tempContainer);
+            })
+            .catch((error) => {
+                console.error("Error generating image:", error);
+                document.body.removeChild(tempContainer);
+            });
+    }
+};
+
   return (
     <Router>
       <div>
