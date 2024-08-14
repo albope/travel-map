@@ -12,6 +12,12 @@ const Blog = () => {
       .catch(error => console.error('Error fetching blog posts:', error));
   }, []);
 
+  const stripHtmlTags = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
+
   return (
     <div className="blog-container">
       <h1 className="blog-title">Travel Blog</h1>
@@ -21,12 +27,12 @@ const Blog = () => {
             <h2 className="post-title">
               <Link to={`/blog/${post.id}`}>{post.title}</Link>
             </h2>
-            <p className="post-date">{new Date(post.date).toLocaleDateString()}</p>
+            <p className="post-date">{new Date().toLocaleDateString()}</p>
             <p className="post-summary">
-              {post.summary}
+              {stripHtmlTags(post.content).split(' ').slice(0, 40).join(' ')}...
             </p>
             <p className="post-read-time">
-              <strong>{post.readingTime}</strong>
+              <strong>Read time: {post.readingTime}</strong>
             </p>
             <Link to={`/blog/${post.id}`} className="read-full-post">
               Read full post

@@ -347,3 +347,8 @@ footer {
 .toggle-button svg {
   margin-left: 8px; /* Espacio entre el texto y el icono */
 }
+.post-read-time {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}
