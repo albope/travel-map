@@ -1,12 +1,11 @@
-/* Reset some default styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9; /* Light background for the whole site */
+  background-color: #f9f9f9;
 }
 
 .header {
-  background-color: #000; /* Black color */
+  background-color: #000;
   color: white;
   padding: 10px 0;
 }
@@ -26,7 +25,7 @@ body {
 }
 
 .nav-links a:hover {
-  color: #ddd; /* Change to light gray on hover */
+  color: #ddd;
 }
 
 .main {
@@ -37,25 +36,25 @@ body {
 .main-title {
   font-size: 36px;
   margin-bottom: 10px;
-  color: #333; /* Change to dark gray for better contrast */
+  color: #333;
 }
 
 .main-description {
   font-size: 18px;
-  color: #555; /* Change to a softer gray */
+  color: #555;
 }
 
 .map-container {
   margin: 0 auto;
-  width: 100%; /* Ensure full width usage */
-  max-width: 1000px; /* Optional: limit max width */
-  height: 600px; /* Adjust as necessary */
+  width: 100%;
+  max-width: 1000px;
+  height: 600px;
   margin-bottom: 20px;
-  background-color: white; /* White background for the map */
-  border-radius: 10px; /* Rounded borders */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for a raised effect */
-  position: relative; /* Ensure relative positioning */
-  overflow: hidden; /* Hide overflow */
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .leaflet-container {
@@ -66,14 +65,14 @@ body {
 
 .country-selector-container {
   margin: 0 auto;
-  width: 100%; /* Ensure full width usage */
-  max-width: 1000px; /* Optional: limit max width */
+  width: 100%;
+  max-width: 1000px;
   text-align: left;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-top: 20px; /* Add margin to separate it from the map */
+  margin-top: 20px;
 }
 
 .country-selector {
@@ -104,15 +103,15 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   max-height: 300px;
-  overflow-y: auto; /* Allows vertical scrolling if items exceed max height */
-  justify-content: space-between; /* Distributes columns evenly */
+  overflow-y: auto;
+  justify-content: space-between;
 }
 
 .country-list .MuiFormControlLabel-root {
-  width: calc(33.33% - 20px); /* Adjust to fit three columns */
-  transition: background-color 0.3s ease; /* Smooth transition for background */
-  box-sizing: border-box; /* Ensures padding and border are included in width */
-  padding: 10px; /* Add padding to separate items */
+  width: calc(33.33% - 20px);
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+  padding: 10px;
 }
 
 footer {
@@ -120,9 +119,10 @@ footer {
   padding: 10px 0;
   text-align: center;
   font-size: 14px;
-  color: #666; /* Soft text for footer */
+  color: #666;
   margin-top: 20px;
 }
+
 .stats-container {
   margin: 0 auto;
   width: 100%;
@@ -130,37 +130,33 @@ footer {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px 30px;
+  padding: 20px;
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column; /* Cambiar la dirección del flex a columna */
-  align-items: center; /* Alinear todos los elementos al centro */
   text-align: center;
-  gap: 30px;
+  box-sizing: border-box; /* Asegura que padding y border estén incluidos en el ancho total */
 }
 
 .stats-title {
   font-size: 26px;
   font-weight: bold;
   margin-bottom: 20px;
-  text-align: center;
   color: #333;
-  width: 100%; /* Asegurarse de que el título ocupe todo el ancho */
 }
 
 .stats-row {
   display: flex;
-  justify-content: space-between; /* Distribut space evenly between items */
-  align-items: center; /* Center items vertically */
-  width: 100%; /* Asegurarse de que los elementos ocupen todo el ancho */
-  max-width: 900px; /* Limitar el ancho máximo de los elementos */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan dentro del contenedor */
 }
 
 .stat-item {
+  flex: 1;
+  min-width: 200px; /* Asegura que los elementos tengan un tamaño mínimo */
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 10px;
 }
 
 .icon {
@@ -174,12 +170,9 @@ footer {
 }
 
 .visited-countries-list {
-  text-align: left;
-  margin-top: 10px;
-  width: 100%;
+  flex: 1;
   max-width: 300px;
-  padding-left: 20px;
-  border-left: 1px solid #e0e0e0;
+  text-align: left;
 }
 
 .visited-countries-list h3 {
@@ -198,9 +191,10 @@ footer {
   border-bottom: 1px solid #f0f0f0;
   font-size: 16px;
 }
+
 .about-container {
   background-color: white;
-  padding: 40px;  /* Increased padding for better spacing */
+  padding: 40px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 800px;
@@ -211,18 +205,18 @@ footer {
 .about-container h2 {
   font-size: 28px;
   font-weight: bold;
-  margin-bottom: 30px;  /* Increased bottom margin */
+  margin-bottom: 30px;
 }
 
 .about-container p {
   font-size: 18px;
   color: #333;
-  margin-bottom: 30px;  /* Increased bottom margin */
-  line-height: 1.6;  /* Added line-height for better readability */
+  margin-bottom: 30px;
+  line-height: 1.6;
 }
 
 .about-container .links {
-  margin-bottom: 20px;  /* Space below links section */
+  margin-bottom: 20px;
 }
 
 .about-container .links a {
@@ -230,33 +224,33 @@ footer {
   margin: 0 15px;
   font-size: 18px;
   text-decoration: none;
-  color: black; /* Text link color */
+  color: black;
   transition: color 0.3s;
-  font-weight: bold;  /* Make links bold for better emphasis */
-  border-bottom: 2px solid transparent; /* Add underline on hover */
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
 }
 
 .about-container .links a:hover {
-  color: #555; /* Hover color */
-  border-bottom: 2px solid #555; /* Visible underline on hover */
+  color: #555;
+  border-bottom: 2px solid #555;
 }
 
 .about-container .contact p {
   font-size: 18px;
   color: #333333;
-  margin-bottom: 20px;  /* Space below each contact item */
+  margin-bottom: 20px;
 }
 
 .email-link {
   text-decoration: none;
   color: black;
-  font-weight: bold;  /* Bold email for clarity */
-  transition: color 0.3s, border-bottom 0.3s; /* Smooth transitions */
+  font-weight: bold;
+  transition: color 0.3s, border-bottom 0.3s;
   border-bottom: 2px solid transparent;
 }
 
 .email-link:hover {
-  color: #555;  /* Email link hover color */
+  color: #555;
   border-bottom: 2px solid #555;
 }
 

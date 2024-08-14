@@ -1,4 +1,3 @@
-// src/components/StatsCard.jsx
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faPlane } from '@fortawesome/free-solid-svg-icons';
@@ -29,14 +28,14 @@ const StatsCard = ({ continents, countries, percentage, visitedCountries }) => {
             <span className="text-lg ml-1">{percentage}%</span>
           </div>
         </div>
-        <div className="visited-countries-list">
-          <h3 className="font-semibold mt-4">Visited Countries:</h3>
-          <ul>
-            {visitedCountries.map((country, index) => (
-              <li key={index} className="text-sm">{country}</li>
-            ))}
-          </ul>
-        </div>
+      </div>
+      <div className="visited-countries-list mt-4">
+        <h3 className="font-semibold">Visited Countries:</h3>
+        <ul className="visited-countries-ul">
+          {visitedCountries.map((country, index) => (
+            <li key={index} className="text-sm">{country}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
