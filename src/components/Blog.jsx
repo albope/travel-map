@@ -21,12 +21,12 @@ const Blog = () => {
             <h2 className="post-title">
               <Link to={`/blog/${post.id}`}>{post.title}</Link>
             </h2>
-            <p className="post-date">{new Date().toLocaleDateString()}</p>
+            <p className="post-date">{new Date(post.date).toLocaleDateString()}</p>
             <p className="post-summary">
-              {post.content.split(' ').slice(0, 40).join(' ')}...
+              {post.summary}
             </p>
             <p className="post-read-time">
-              <strong>6 min read</strong>
+              <strong>{post.readingTime}</strong>
             </p>
             <Link to={`/blog/${post.id}`} className="read-full-post">
               Read full post

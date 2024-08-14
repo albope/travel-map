@@ -1,4 +1,3 @@
-// BlogPost.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './Blog.css';
@@ -25,8 +24,11 @@ const BlogPost = () => {
     <div className="blog-post-container">
       <Link to="/blog" className="back-link">← Back to Blog</Link>
       <h1 className="post-title">{post.title}</h1>
-      <p className="post-date">{new Date().toLocaleDateString()}</p>
-      <p className="post-content">{post.content}</p>
+      <p className="post-date">{new Date(post.date).toLocaleDateString()}</p>
+      <div 
+        className="post-content" 
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
     </div>
   );
 };
