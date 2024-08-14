@@ -1,10 +1,66 @@
 // src/components/MapComponent.jsx
-import React from "react";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import countriesData from "../data/world-110m.json";
 
+const ResetZoomControl = ({ initialZoom }) => {
+  const map = useMap();
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleZoomEnd = () => {
+      if (map.getZoom() !== initialZoom) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    map.on("zoomend", handleZoomEnd);
+
+    return () => {
+      map.off("zoomend", handleZoomEnd);
+    };
+  }, [map, initialZoom]);
+
+  useEffect(() => {
+    if (showButton) {
+      const resetZoomButton = L.control({ position: "topleft" });
+
+      resetZoomButton.onAdd = function () {
+        const div = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-custom");
+        div.innerHTML = "&#x21bb;"; // Unicode para el símbolo de recargar (↻)
+        div.style.fontSize = "18px";
+        div.style.width = "30px";
+        div.style.height = "30px";
+        div.style.lineHeight = "30px";
+        div.style.textAlign = "center";
+        div.style.cursor = "pointer";
+        div.title = "Reset Zoom";
+
+        div.onclick = function () {
+          map.setView([20, 0], initialZoom); // Centrar el mapa en la vista original con el zoom inicial
+        };
+
+        return div;
+      };
+
+      resetZoomButton.addTo(map);
+
+      return () => {
+        map.removeControl(resetZoomButton);
+      };
+    }
+  }, [showButton, map, initialZoom]);
+
+  return null;
+};
+
 const MapComponent = ({ selectedCountries }) => {
+  const initialZoom = 2;
+
   const styleFeature = (feature) => {
     const countryName = feature.properties.ADMIN;
 
@@ -45,7 +101,7 @@ const MapComponent = ({ selectedCountries }) => {
     <div id="map-container" className="map-wrapper" style={{ overflow: "hidden", padding: 0 }}>
       <MapContainer
         center={[20, 0]}
-        zoom={2}
+        zoom={initialZoom}
         style={{ height: "600px", width: "100%", margin: 0, padding: 0 }}
         className="leaflet-container"
         minZoom={2}
@@ -63,6 +119,7 @@ const MapComponent = ({ selectedCountries }) => {
           style={styleFeature}
           onEachFeature={onEachCountry}
         />
+        <ResetZoomControl initialZoom={initialZoom} /> {/* Añadir el botón de reinicio de zoom */}
       </MapContainer>
     </div>
   );
