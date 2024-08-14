@@ -324,9 +324,7 @@ return (
       <header className="header">
         <nav className="navbar">
           <div className="logo">
-            <span role="img" aria-label="globo">
-              🌍
-            </span>
+            <span role="img" aria-label="globo">🌍</span>
             <span>Travel-map generator</span>
           </div>
           <HamburgerMenu />
@@ -359,11 +357,11 @@ return (
                     selectedCountries={selectedCountries}
                   />
                 </div>
-                <div className="actions-container">
+                <div className="actions-container" id="actions-section">
                   <button className="download-button" onClick={handleDownload}>
                     Download Map in PNG
                   </button>
-                  <span className="or-separator">OR</span> {/* Agregar el separador OR */}
+                  <span className="or-separator">OR</span>
                   <ShareButtons
                     countriesVisited={getVisitedCountriesCount()}
                     worldPercentage={getVisitedPercentage()}
@@ -382,6 +380,26 @@ return (
           Made with <span style={{ color: "red" }}>❤</span> by Alberto Bort
         </p>
       </footer>
+
+      {/* Botón de desplazamiento */}
+      <button
+        onClick={() => {
+          document.getElementById("actions-section").scrollIntoView({ behavior: 'smooth' });
+        }}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          zIndex: 1000
+        }}
+      >
+        Share/Download your map!
+      </button>
     </div>
   </Router>
 );

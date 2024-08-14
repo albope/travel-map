@@ -5,10 +5,10 @@ import { FaFacebookF, FaTwitter, FaWhatsapp, FaLink } from 'react-icons/fa';
 
 const ShareButtons = ({ countriesVisited, worldPercentage }) => {
   const shareUrl = window.location.href; // Obtiene la URL actual de la página
-  const shareText = `I have visited ${countriesVisited} countries in the world, which accounts for ${worldPercentage}% of the world. Track and count all the countries you've visited with the interactive world map at ${shareUrl}`;
+  const shareText = `I have visited ${countriesVisited} countries, which accounts for ${worldPercentage}% of the world. Track and count all the countries you've visited with the interactive world map.`;
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareUrl);
+    navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
     alert('Link copied to clipboard!');
   };
 
@@ -25,9 +25,9 @@ const ShareButtons = ({ countriesVisited, worldPercentage }) => {
         <WhatsappShareButton url={shareUrl} title={shareText}>
           <FaWhatsapp />
         </WhatsappShareButton>
-        <div className="copy-link-button" onClick={copyToClipboard}>
+        <button className="copy-link-button" onClick={copyToClipboard}>
           <FaLink />
-        </div>
+        </button>
       </div>
     </div>
   );
