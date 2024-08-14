@@ -21,22 +21,30 @@
   align-items: center; /* Asegura que todos los íconos estén alineados en el centro */
 }
 
-.share-buttons button {
+.share-buttons div, .share-buttons button {
   background-color: transparent; /* Hacer transparente el fondo del botón */
   color: black;
   border: none; /* Eliminar el borde */
-  padding: 0;
+  padding: 0; /* Asegura que el padding no desplace los íconos */
   cursor: pointer;
   outline: none; /* Asegura que no haya borde de enfoque */
   box-shadow: none; /* Elimina cualquier sombra */
   display: flex;
   align-items: center;
+  justify-content: center; /* Asegura que el icono esté centrado en el botón */
 }
 
-.share-buttons button:hover {
+.share-buttons div:hover, .share-buttons button:hover {
   color: #0056b3; /* Cambiar el color del icono al pasar el mouse */
 }
 
 .share-buttons svg {
   font-size: 24px; /* Aumentar un poco el tamaño de los iconos si es necesario */
+  margin: 0;
+}
+
+.share-buttons button:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
