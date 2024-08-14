@@ -16,35 +16,38 @@
 
 .share-buttons {
   display: flex;
+  gap: 50px; /* Ajustar el espaciado entre los íconos */
   justify-content: center; /* Centrar los íconos */
-  gap: 30px; /* Ajustar el espaciado entre los íconos */
   align-items: center; /* Asegura que todos los íconos estén alineados en el centro */
 }
 
-.share-buttons div, .share-buttons button {
-  background-color: transparent; /* Hacer transparente el fondo del botón */
-  color: black;
-  border: none; /* Eliminar el borde */
-  padding: 0; /* Asegura que el padding no desplace los íconos */
-  cursor: pointer;
-  outline: none; /* Asegura que no haya borde de enfoque */
-  box-shadow: none; /* Elimina cualquier sombra */
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Asegura que el icono esté centrado en el botón */
+.share-buttons div, .share-buttons button, .share-buttons .copy-link-button {
+  background-color: transparent !important;
+  color: black !important;
+  border: none !important; /* Eliminar el borde */
+  padding: 10px !important;
+  cursor: pointer !important;
+  outline: none !important; /* Asegura que no haya borde de enfoque */
+  box-shadow: none !important; /* Elimina cualquier sombra */
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important; /* Asegura que no haya margen alrededor de los iconos */
 }
 
-.share-buttons div:hover, .share-buttons button:hover {
-  color: #0056b3; /* Cambiar el color del icono al pasar el mouse */
+/* Aplicar estilos específicos a los botones para eliminar cualquier borde o fondo */
+.share-buttons button,
+.share-buttons button:focus,
+.share-buttons button:active {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.share-buttons div:hover, .share-buttons button:hover, .share-buttons .copy-link-button:hover {
+  color: #0056b3 !important; /* Cambiar el color del icono al pasar el mouse */
 }
 
 .share-buttons svg {
-  font-size: 24px; /* Aumentar un poco el tamaño de los iconos si es necesario */
-  margin: 0;
-}
-
-.share-buttons button:focus {
-  border: none;
-  outline: none;
-  box-shadow: none;
+  font-size: 20px;
 }

@@ -1,7 +1,7 @@
 // src/components/ShareButtons.jsx
 import React from 'react';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
-import { FaFacebookF, FaTwitter, FaWhatsapp, FaLink } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaWhatsapp, FaCopy } from 'react-icons/fa';  // Cambiado a FaCopy
 
 const ShareButtons = ({ countriesVisited, worldPercentage }) => {
   const shareUrl = window.location.href; // Obtiene la URL actual de la página
@@ -26,7 +26,7 @@ const ShareButtons = ({ countriesVisited, worldPercentage }) => {
           <FaWhatsapp />
         </WhatsappShareButton>
         <button className="copy-link-button" onClick={copyToClipboard}>
-          <FaLink />
+          <FaCopy /> {/* Cambiado a FaCopy */}
         </button>
       </div>
     </div>
