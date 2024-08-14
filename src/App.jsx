@@ -9,6 +9,7 @@ import HamburgerMenu from "./components/HamburgerMenu";
 import Blog from "./components/Blog"; // Importa el componente Blog
 import BlogPost from "./components/BlogPost"; // Importa el componente BlogPost
 import domtoimage from "dom-to-image";
+import ShareButtons from './components/ShareButtons'; // Importar el componente de compartir
 import "./index.css";
 
 // Mapeo manual de países a continentes
@@ -317,66 +318,73 @@ const App = () => {
     }
 };
 
-  return (
-    <Router>
-      <div>
-        <header className="header">
-          <nav className="navbar">
-            <div className="logo">
-              <span role="img" aria-label="globo">
-                🌍
-              </span>
-              <span>Travel-map generator</span>
-            </div>
-            <HamburgerMenu />
-          </nav>
-        </header>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <main className="main">
-                <section id="map-generator">
-                  <h1 className="main-title">Travel. Select. Generate.</h1>
-                  <p className="main-description">
-                    Create a personalized travel map showcasing the countries you've visited marking them in the 'Countries I have been to..' section. Share your adventures with friends and plan your next destination!
-                  </p>
-                  <div className="map-container" ref={mapRef}>
-                    <MapComponent selectedCountries={selectedCountries} />
-                  </div>
-                  <div className="stats-container">
-                    <StatsCard
-                      continents={getVisitedContinents()}
-                      countries={getVisitedCountriesCount()}
-                      percentage={getVisitedPercentage()}
-                      visitedCountries={selectedCountries}
-                    />
-                  </div>
-                  <div className="country-selector-container">
-                    <CountrySelector
-                      onCountrySelect={handleCountrySelect}
-                      selectedCountries={selectedCountries}
-                    />
-                  </div>
+return (
+  <Router>
+    <div>
+      <header className="header">
+        <nav className="navbar">
+          <div className="logo">
+            <span role="img" aria-label="globo">
+              🌍
+            </span>
+            <span>Travel-map generator</span>
+          </div>
+          <HamburgerMenu />
+        </nav>
+      </header>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main className="main">
+              <section id="map-generator">
+                <h1 className="main-title">Travel. Select. Generate.</h1>
+                <p className="main-description">
+                  Create a personalized travel map showcasing the countries you've visited marking them in the 'Countries I have been to..' section. Share your adventures with friends and plan your next destination!
+                </p>
+                <div className="map-container" ref={mapRef}>
+                  <MapComponent selectedCountries={selectedCountries} />
+                </div>
+                <div className="stats-container">
+                  <StatsCard
+                    continents={getVisitedContinents()}
+                    countries={getVisitedCountriesCount()}
+                    percentage={getVisitedPercentage()}
+                    visitedCountries={selectedCountries}
+                  />
+                </div>
+                <div className="country-selector-container">
+                  <CountrySelector
+                    onCountrySelect={handleCountrySelect}
+                    selectedCountries={selectedCountries}
+                  />
+                </div>
+                <div className="actions-container">
                   <button className="download-button" onClick={handleDownload}>
-                    Download Map
+                    Download Map in PNG
                   </button>
-                </section>
-              </main>
-            }
-          />
-          <Route path="/about" element={<About />} /> {/* Ruta para la página About */}
-          <Route path="/blog" element={<Blog />} /> {/* Ruta para la página Blog */}
-          <Route path="/blog/:id" element={<BlogPost />} />
-        </Routes>
-        <footer>
-          <p>
-            Made with <span style={{ color: "red" }}>❤</span> by Alberto Bort
-          </p>
-        </footer>
-      </div>
-    </Router>
-  );
+                  <span className="or-separator">OR</span> {/* Agregar el separador OR */}
+                  <ShareButtons
+                    countriesVisited={getVisitedCountriesCount()}
+                    worldPercentage={getVisitedPercentage()}
+                  />
+                </div>
+              </section>
+            </main>
+          }
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+      </Routes>
+      <footer>
+        <p>
+          Made with <span style={{ color: "red" }}>❤</span> by Alberto Bort
+        </p>
+      </footer>
+    </div>
+  </Router>
+);
 };
 
 export default App;

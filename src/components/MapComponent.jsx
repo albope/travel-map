@@ -1,9 +1,9 @@
-// src/components/MapComponent.jsx
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import countriesData from "../data/world-110m.json";
+import ShareButtons from './ShareButtons'; // Importar el componente de compartir
 
 const ResetZoomControl = ({ initialZoom }) => {
   const map = useMap();
@@ -31,7 +31,7 @@ const ResetZoomControl = ({ initialZoom }) => {
 
       resetZoomButton.onAdd = function () {
         const div = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-custom");
-        div.innerHTML = "&#x21bb;"; // Unicode para el símbolo de recargar (↻)
+        div.innerHTML = "&#x21bb;";
         div.style.fontSize = "18px";
         div.style.width = "30px";
         div.style.height = "30px";
@@ -41,7 +41,7 @@ const ResetZoomControl = ({ initialZoom }) => {
         div.title = "Reset Zoom";
 
         div.onclick = function () {
-          map.setView([20, 0], initialZoom); // Centrar el mapa en la vista original con el zoom inicial
+          map.setView([20, 0], initialZoom);
         };
 
         return div;
@@ -66,16 +66,16 @@ const MapComponent = ({ selectedCountries }) => {
 
     if (selectedCountries.includes(countryName)) {
       return {
-        fillColor: "#FF0000", // Rojo para países seleccionados
+        fillColor: "#FF0000",
         fillOpacity: 0.5,
-        color: "#FF0000", // Borde rojo
+        color: "#FF0000",
         weight: 2,
       };
     } else {
       return {
-        fillColor: "#3388ff", // Azul por defecto
+        fillColor: "#3388ff",
         fillOpacity: 0.2,
-        color: "#3388ff", // Borde azul
+        color: "#3388ff",
         weight: 1,
       };
     }
@@ -91,10 +91,12 @@ const MapComponent = ({ selectedCountries }) => {
     });
   };
 
-  // Establecer los límites para que el mapa sea visible
+  const getVisitedCountriesCount = () => selectedCountries.length;
+  const getVisitedPercentage = () => ((selectedCountries.length / 195) * 100).toFixed(2);
+
   const worldBounds = [
-    [-60, -180], // Suroeste
-    [85, 180],   // Noreste
+    [-60, -180],
+    [85, 180],
   ];
 
   return (
@@ -107,8 +109,8 @@ const MapComponent = ({ selectedCountries }) => {
         minZoom={2}
         maxZoom={5}
         scrollWheelZoom={true}
-        maxBounds={worldBounds} // Usar límites del mundo para que el mapa se recorte correctamente
-        maxBoundsViscosity={1.0} // Viscosidad para mantener el mapa dentro de los límites
+        maxBounds={worldBounds}
+        maxBoundsViscosity={1.0}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -119,8 +121,14 @@ const MapComponent = ({ selectedCountries }) => {
           style={styleFeature}
           onEachFeature={onEachCountry}
         />
-        <ResetZoomControl initialZoom={initialZoom} /> {/* Añadir el botón de reinicio de zoom */}
+        <ResetZoomControl initialZoom={initialZoom} />
       </MapContainer>
+
+      {/* Componente de compartir debajo del mapa */}
+      <ShareButtons
+        countriesVisited={getVisitedCountriesCount()}
+        worldPercentage={getVisitedPercentage()}
+      />
     </div>
   );
 };

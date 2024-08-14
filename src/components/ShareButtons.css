@@ -1,0 +1,42 @@
+/* src/components/ShareButtons.css */
+.share-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.share-buttons-container p {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.share-buttons {
+  display: flex;
+  justify-content: center; /* Centrar los íconos */
+  gap: 30px; /* Ajustar el espaciado entre los íconos */
+  align-items: center; /* Asegura que todos los íconos estén alineados en el centro */
+}
+
+.share-buttons button {
+  background-color: transparent; /* Hacer transparente el fondo del botón */
+  color: black;
+  border: none; /* Eliminar el borde */
+  padding: 0;
+  cursor: pointer;
+  outline: none; /* Asegura que no haya borde de enfoque */
+  box-shadow: none; /* Elimina cualquier sombra */
+  display: flex;
+  align-items: center;
+}
+
+.share-buttons button:hover {
+  color: #0056b3; /* Cambiar el color del icono al pasar el mouse */
+}
+
+.share-buttons svg {
+  font-size: 24px; /* Aumentar un poco el tamaño de los iconos si es necesario */
+}
