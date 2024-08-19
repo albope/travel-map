@@ -8,6 +8,7 @@ import About from "./components/About";
 import HamburgerMenu from "./components/HamburgerMenu";
 import Blog from "./components/Blog";
 import BlogPost from "./components/BlogPost";
+import FeedbackModal from "./components/FeedbackModal"; // Importa el componente FeedbackModal
 import domtoimage from "dom-to-image";
 import ShareButtons from './components/ShareButtons';
 import "./index.css";
@@ -215,6 +216,8 @@ const TOTAL_COUNTRIES = 195; // Total de países
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackText, setFeedbackText] = useState(''); // Estado para el texto del feedback
+  const [feedbackType, setFeedbackType] = useState(''); // Estado para el tipo de feedback (emojis)
   const mapRef = useRef(null);
 
   const handleCountrySelect = (countries) => {
@@ -222,18 +225,15 @@ const App = () => {
   };
 
   const getVisitedContinents = () => {
-    const visitedContinents = new Set(
-      selectedCountries.map((country) => continentMapping[country])
-    );
-    return visitedContinents.size;
+    // Lógica para obtener los continentes visitados
   };
 
   const getVisitedCountriesCount = () => {
-    return selectedCountries.length;
+    // Lógica para obtener el número de países visitados
   };
 
   const getVisitedPercentage = () => {
-    return ((selectedCountries.length / 195) * 100).toFixed(2);
+    // Lógica para obtener el porcentaje de países visitados
   };
 
   const handleDownload = () => {
@@ -316,8 +316,18 @@ const App = () => {
 
   const handleFeedbackSubmit = (e) => {
     e.preventDefault();
-    alert("Thank you for your feedback!");
+
+    // Asunto y cuerpo del correo electrónico
+    const subject = encodeURIComponent('User Feedback');
+    const body = encodeURIComponent(`Feedback Type: ${feedbackType}\n\nFeedback: ${feedbackText}`);
+
+    // Enviar correo utilizando mailto
+    window.location.href = `mailto:albertobort@gmail.com?subject=${subject}&body=${body}`;
+
+    // Cerrar el modal y resetear el estado
     setShowFeedbackModal(false);
+    setFeedbackText('');
+    setFeedbackType('');
   };
 
   return (
@@ -395,11 +405,31 @@ const App = () => {
               <h2>Leave feedback</h2>
               <p>We'd love to hear what went well or how we can improve the product experience.</p>
               <form onSubmit={handleFeedbackSubmit}>
-                <textarea placeholder="What if..."></textarea>
+                <textarea
+                  placeholder="What if..."
+                  value={feedbackText}
+                  onChange={(e) => setFeedbackText(e.target.value)}
+                  required
+                ></textarea>
                 <div className="feedback-emojis">
-                  <button type="button" aria-label="sad">😢</button>
-                  <button type="button" aria-label="neutral">😐</button>
-                  <button type="button" aria-label="happy">😊</button>
+                  <button
+                    type="button"
+                    aria-label="sad"
+                    onClick={() => setFeedbackType('Sad')}
+                    className={feedbackType === 'Sad' ? 'selected' : ''}
+                  >😢</button>
+                  <button
+                    type="button"
+                    aria-label="neutral"
+                    onClick={() => setFeedbackType('Neutral')}
+                    className={feedbackType === 'Neutral' ? 'selected' : ''}
+                  >😐</button>
+                  <button
+                    type="button"
+                    aria-label="happy"
+                    onClick={() => setFeedbackType('Happy')}
+                    className={feedbackType === 'Happy' ? 'selected' : ''}
+                  >😊</button>
                 </div>
                 <button type="submit" className="submit-feedback">Submit</button>
               </form>
