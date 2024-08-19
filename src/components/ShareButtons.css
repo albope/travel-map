@@ -17,35 +17,20 @@
 .share-buttons {
   display: flex;
   gap: 50px; /* Ajustar el espaciado entre los íconos */
-  justify-content: center; /* Centrar los íconos */
-  align-items: center; /* Asegura que todos los íconos estén alineados en el centro */
 }
 
-.share-buttons div, .share-buttons button, .share-buttons .copy-link-button {
-  background-color: transparent !important;
-  color: black !important;
-  border: none !important; /* Eliminar el borde */
-  padding: 10px !important;
-  cursor: pointer !important;
-  outline: none !important; /* Asegura que no haya borde de enfoque */
-  box-shadow: none !important; /* Elimina cualquier sombra */
-  display: flex !important;
-  align-items: center !important;
-  margin: 0 !important; /* Asegura que no haya margen alrededor de los iconos */
+.share-buttons div, .share-buttons button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
 }
 
-/* Aplicar estilos específicos a los botones para eliminar cualquier borde o fondo */
-.share-buttons button,
-.share-buttons button:focus,
-.share-buttons button:active {
-  background: none !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.share-buttons div:hover, .share-buttons button:hover, .share-buttons .copy-link-button:hover {
-  color: #0056b3 !important; /* Cambiar el color del icono al pasar el mouse */
+.share-buttons div:hover, .share-buttons button:hover {
+  color: #0056b3;
 }
 
 .share-buttons svg {
