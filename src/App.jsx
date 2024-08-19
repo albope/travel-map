@@ -225,15 +225,18 @@ const App = () => {
   };
 
   const getVisitedContinents = () => {
-    // Lógica para obtener los continentes visitados
+    const visitedContinents = new Set(
+      selectedCountries.map(country => continentMapping[country])
+    );
+    return visitedContinents.size;
   };
 
   const getVisitedCountriesCount = () => {
-    // Lógica para obtener el número de países visitados
+    return selectedCountries.length;
   };
 
   const getVisitedPercentage = () => {
-    // Lógica para obtener el porcentaje de países visitados
+    return ((selectedCountries.length / TOTAL_COUNTRIES) * 100).toFixed(2);
   };
 
   const handleDownload = () => {
