@@ -320,14 +320,11 @@ const App = () => {
   const handleFeedbackSubmit = (e) => {
     e.preventDefault();
 
-    // Asunto y cuerpo del correo electrónico
     const subject = encodeURIComponent('User Feedback');
     const body = encodeURIComponent(`Feedback Type: ${feedbackType}\n\nFeedback: ${feedbackText}`);
 
-    // Enviar correo utilizando mailto
     window.location.href = `mailto:albertobort@gmail.com?subject=${subject}&body=${body}`;
 
-    // Cerrar el modal y resetear el estado
     setShowFeedbackModal(false);
     setFeedbackText('');
     setFeedbackType('');
@@ -388,6 +385,25 @@ const App = () => {
                     />
                   </div>
                 </section>
+                {/* Botón de desplazamiento */}
+                <button
+                  onClick={() => {
+                    document.getElementById("actions-section").scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    zIndex: 1000
+                  }}
+                >
+                  Scroll Down to Share/Download
+                </button>
               </main>
             }
           />

@@ -475,3 +475,48 @@ footer {
 .submit-feedback:hover {
   background-color: #333;
 }
+
+/* Estilo para la sección FAQ */
+.faq-section {
+  margin-top: 30px;
+}
+
+.faq-item h3 {
+  cursor: pointer;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+.faq-item p {
+  display: none;
+  margin-left: 20px;
+}
+
+.faq-item p.open {
+  display: block;
+}
+
+/* Estilo para la sección de contacto */
+.contact-section {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.contact-box {
+  background-color: #ffffff;
+  padding: 15px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-box a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.contact-box a:hover {
+  text-decoration: underline;
+}
