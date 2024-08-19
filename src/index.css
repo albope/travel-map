@@ -366,3 +366,112 @@ footer {
   font-weight: bold;
   color: #333;
 }
+
+.feedback-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+.feedback-button {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px; /* Espacio entre Feedback y el menú de hamburguesa */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.feedback-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.feedback-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.feedback-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.feedback-modal h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.feedback-modal p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.feedback-modal textarea {
+  width: 100%;
+  height: 80px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.feedback-emojis {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.feedback-emojis button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.submit-feedback {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+}
+
+.submit-feedback:hover {
+  background-color: #333;
+}

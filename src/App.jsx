@@ -214,6 +214,7 @@ const TOTAL_COUNTRIES = 195; // Total de países
 
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const mapRef = useRef(null);
 
   const handleCountrySelect = (countries) => {
@@ -232,90 +233,91 @@ const App = () => {
   };
 
   const getVisitedPercentage = () => {
-    return ((selectedCountries.length / TOTAL_COUNTRIES) * 100).toFixed(2);
+    return ((selectedCountries.length / 195) * 100).toFixed(2);
   };
 
   const handleDownload = () => {
     const mapElement = mapRef.current;
     if (mapElement) {
-        // Crear un nuevo contenedor temporal para el mapa con el título y la leyenda
-        const tempContainer = document.createElement("div");
-        tempContainer.style.border = "2px solid black";
-        tempContainer.style.backgroundColor = "white";
-        tempContainer.style.position = "relative";
-        tempContainer.style.width = "1400px";
-        tempContainer.style.height = "auto";
-        tempContainer.style.overflow = "hidden";
-        tempContainer.style.display = "flex";
-        tempContainer.style.flexDirection = "column";
-        tempContainer.style.alignItems = "center";
-    
-        const title = document.createElement("h1");
-        title.textContent = "My Travel Map";
-        title.style.textAlign = "center";
-        title.style.marginBottom = "20px";
-        tempContainer.appendChild(title);
-    
-        const subtitle = document.createElement("p");
-        subtitle.innerHTML = `You have visited <span style="font-weight: bold;">${getVisitedPercentage()}%</span> of the world!`;
-        subtitle.style.marginBottom = "20px";
-        tempContainer.appendChild(subtitle);
-    
-        // Clonar el mapa y agregarlo al contenedor temporal
-        const mapClone = mapElement.cloneNode(true);
-        mapClone.style.width = "1300px";
-        mapClone.style.height = "600px"; // Ajustar la altura del mapa clonado para eliminar espacio en blanco
-        mapClone.style.position = "relative";
-        mapClone.style.marginBottom = "10px"; // Ajuste del margen inferior
-        tempContainer.appendChild(mapClone);
-    
-        // Añadir la lista de países visitados en el área marcada en rojo (debajo del mapa)
-        const visitedCountriesContainer = document.createElement("div");
-        visitedCountriesContainer.style.padding = "10px";
-        visitedCountriesContainer.style.width = "1300px";
-        visitedCountriesContainer.style.textAlign = "center";
-        visitedCountriesContainer.style.fontSize = "14px";
-        visitedCountriesContainer.style.position = "relative";
-        visitedCountriesContainer.style.top = "-20px"; // Ajuste para que quede bien debajo del mapa
-    
-        const visitedCountriesTitle = document.createElement("h3");
-        visitedCountriesTitle.textContent = "Countries You Have Visited:";
-        visitedCountriesContainer.appendChild(visitedCountriesTitle);
-    
-        const visitedCountriesList = document.createElement("p");
-        visitedCountriesList.textContent = selectedCountries.join(", ");
-        visitedCountriesContainer.appendChild(visitedCountriesList);
-    
-        tempContainer.appendChild(visitedCountriesContainer);
-    
-        document.body.appendChild(tempContainer);
-    
-        // Ocultar los controles de zoom antes de capturar la imagen
-        const zoomControls = tempContainer.querySelector(".leaflet-control-zoom");
-        if (zoomControls) {
-            zoomControls.style.display = "none";
-        }
-    
-        // Ocultar la marca de Leaflet antes de capturar la imagen
-        const attribution = tempContainer.querySelector(".leaflet-control-attribution");
-        if (attribution) {
-            attribution.style.display = "none";
-        }
-    
-        domtoimage.toPng(tempContainer)
-            .then((dataUrl) => {
-                const link = document.createElement("a");
-                link.href = dataUrl;
-                link.download = "Countries_visited.png";
-                link.click();
-    
-                document.body.removeChild(tempContainer);
-            })
-            .catch((error) => {
-                console.error("Error generating image:", error);
-                document.body.removeChild(tempContainer);
-            });
+      const tempContainer = document.createElement("div");
+      tempContainer.style.border = "2px solid black";
+      tempContainer.style.backgroundColor = "white";
+      tempContainer.style.position = "relative";
+      tempContainer.style.width = "1400px";
+      tempContainer.style.height = "auto";
+      tempContainer.style.overflow = "hidden";
+      tempContainer.style.display = "flex";
+      tempContainer.style.flexDirection = "column";
+      tempContainer.style.alignItems = "center";
+
+      const title = document.createElement("h1");
+      title.textContent = "My Travel Map";
+      title.style.textAlign = "center";
+      title.style.marginBottom = "20px";
+      tempContainer.appendChild(title);
+
+      const subtitle = document.createElement("p");
+      subtitle.innerHTML = `You have visited <span style="font-weight: bold;">${getVisitedPercentage()}%</span> of the world!`;
+      subtitle.style.marginBottom = "20px";
+      tempContainer.appendChild(subtitle);
+
+      const mapClone = mapElement.cloneNode(true);
+      mapClone.style.width = "1300px";
+      mapClone.style.height = "600px";
+      mapClone.style.position = "relative";
+      mapClone.style.marginBottom = "10px";
+      tempContainer.appendChild(mapClone);
+
+      const visitedCountriesContainer = document.createElement("div");
+      visitedCountriesContainer.style.padding = "10px";
+      visitedCountriesContainer.style.width = "1300px";
+      visitedCountriesContainer.style.textAlign = "center";
+      visitedCountriesContainer.style.fontSize = "14px";
+      visitedCountriesContainer.style.position = "relative";
+      visitedCountriesContainer.style.top = "-20px";
+
+      const visitedCountriesTitle = document.createElement("h3");
+      visitedCountriesTitle.textContent = "Countries You Have Visited:";
+      visitedCountriesContainer.appendChild(visitedCountriesTitle);
+
+      const visitedCountriesList = document.createElement("p");
+      visitedCountriesList.textContent = selectedCountries.join(", ");
+      visitedCountriesContainer.appendChild(visitedCountriesList);
+
+      tempContainer.appendChild(visitedCountriesContainer);
+
+      document.body.appendChild(tempContainer);
+
+      const zoomControls = tempContainer.querySelector(".leaflet-control-zoom");
+      if (zoomControls) {
+        zoomControls.style.display = "none";
+      }
+
+      const attribution = tempContainer.querySelector(".leaflet-control-attribution");
+      if (attribution) {
+        attribution.style.display = "none";
+      }
+
+      domtoimage.toPng(tempContainer)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "Countries_visited.png";
+          link.click();
+
+          document.body.removeChild(tempContainer);
+        })
+        .catch((error) => {
+          console.error("Error generating image:", error);
+          document.body.removeChild(tempContainer);
+        });
     }
+  };
+
+  const handleFeedbackSubmit = (e) => {
+    e.preventDefault();
+    alert("Thank you for your feedback!");
+    setShowFeedbackModal(false);
   };
 
   return (
@@ -327,7 +329,12 @@ const App = () => {
               <span role="img" aria-label="globo">🌍</span>
               <span>Travel-map generator</span>
             </Link>
-            <HamburgerMenu />
+            <div className="right-section">
+              <button className="feedback-button" onClick={() => setShowFeedbackModal(true)}>
+                Feedback
+              </button>
+              <HamburgerMenu />
+            </div>
           </nav>
         </header>
         <Routes>
@@ -380,6 +387,25 @@ const App = () => {
             Made with <span style={{ color: "red" }}>❤</span> by Alberto Bort
           </p>
         </footer>
+
+        {showFeedbackModal && (
+          <div className="feedback-modal-overlay">
+            <div className="feedback-modal">
+              <button className="close-modal" onClick={() => setShowFeedbackModal(false)}>X</button>
+              <h2>Leave feedback</h2>
+              <p>We'd love to hear what went well or how we can improve the product experience.</p>
+              <form onSubmit={handleFeedbackSubmit}>
+                <textarea placeholder="What if..."></textarea>
+                <div className="feedback-emojis">
+                  <button type="button" aria-label="sad">😢</button>
+                  <button type="button" aria-label="neutral">😐</button>
+                  <button type="button" aria-label="happy">😊</button>
+                </div>
+                <button type="submit" className="submit-feedback">Submit</button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </Router>
   );
