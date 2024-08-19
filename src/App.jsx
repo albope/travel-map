@@ -355,13 +355,25 @@ const App = () => {
                 <section id="map-generator">
                   <h1 className="main-title">Travel. Select. Generate.</h1>
                   <p className="main-description">
-                    Create a personalized travel map showcasing the countries you've visited marking them in the <strong><a href="#!" onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById('country-selector-container');
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }} style={{ color: 'inherit', textDecoration: 'underline' }}>'Countries I have been to..'</a></strong> section. Share your adventures with friends and plan your next destination!
+                    Create a personalized travel map showcasing the countries you've visited marking them in the <strong><a
+                      href="#!"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const element = document.getElementById('country-selector-container');
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      style={{
+                        color: '#007bff',
+                        textDecoration: 'underline',
+                        cursor: 'pointer'
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.color = '#0056b3'}
+                      onMouseOut={(e) => e.currentTarget.style.color = '#007bff'}
+                    >
+                      'Countries I have been to..'
+                    </a></strong> section. Share your adventures with friends and plan your next destination!
                   </p>
                   <div className="map-container" ref={mapRef}>
                     <MapComponent selectedCountries={selectedCountries} />
