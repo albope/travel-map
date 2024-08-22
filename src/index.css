@@ -520,3 +520,103 @@ footer {
 .contact-box a:hover {
   text-decoration: underline;
 }
+/* Estilos generales para mobile responsiveness */
+@media (max-width: 768px) {
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .main-title {
+    font-size: 28px;
+  }
+
+  .main-description {
+    font-size: 16px;
+    padding: 0 10px;
+  }
+
+  .map-container {
+    height: 400px;
+    max-width: 100%;
+  }
+
+  .country-selector-container,
+  .stats-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .country-selector h2 {
+    font-size: 20px;
+  }
+
+  .country-list .MuiFormControlLabel-root {
+    width: calc(50% - 10px);
+  }
+
+  .stat-item {
+    min-width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .actions-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .download-button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .map-wrapper {
+    padding: 0;
+  }
+}
+/* Ajustes para las pestañas de continentes en dispositivos móviles */
+@media (max-width: 768px) {
+  .MuiTabs-flexContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .MuiTab-root {
+    flex: 1 1 auto;
+    max-width: 100%;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .country-list {
+    max-height: 200px; /* Ajustar la altura para que se vea mejor en móvil */
+  }
+}
+/* Ajustes adicionales para mejorar la responsividad del mapa en móviles */
+@media (max-width: 768px) {
+  .map-container {
+    height: 300px; /* Reduce la altura del mapa para que se ajuste mejor en móviles */
+    max-width: 100%;
+  }
+
+  .leaflet-container {
+    height: 100%; /* Asegura que el mapa ocupe toda la altura del contenedor */
+    width: 100%; /* Asegura que el mapa ocupe todo el ancho del contenedor */
+  }
+
+  .leaflet-control-zoom {
+    transform: scale(0.8); /* Reduce el tamaño de los botones de zoom para móviles */
+  }
+
+  .map-wrapper {
+    padding: 0;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  .leaflet-popup-content-wrapper {
+    font-size: 14px; /* Ajusta el tamaño de fuente del popup para mejorar la legibilidad */
+  }
+}

@@ -59,7 +59,9 @@ const ResetZoomControl = ({ initialZoom }) => {
 };
 
 const MapComponent = ({ selectedCountries }) => {
-  const initialZoom = 2;
+  const initialZoom = window.innerWidth < 768 ? 1 : 2; // Ajuste de zoom para dispositivos móviles
+  const minZoom = window.innerWidth < 768 ? 1 : 2; // Ajuste de zoom mínimo para dispositivos móviles
+  const maxZoom = window.innerWidth < 768 ? 4 : 5; // Ajuste de zoom máximo para dispositivos móviles
 
   const styleFeature = (feature) => {
     const countryName = feature.properties.ADMIN;
@@ -104,10 +106,10 @@ const MapComponent = ({ selectedCountries }) => {
       <MapContainer
         center={[20, 0]}
         zoom={initialZoom}
-        style={{ height: "600px", width: "100%", margin: 0, padding: 0 }}
+        style={{ height: window.innerWidth < 768 ? "400px" : "600px", width: "100%", margin: 0, padding: 0 }}
         className="leaflet-container"
-        minZoom={2}
-        maxZoom={5}
+        minZoom={minZoom}
+        maxZoom={maxZoom}
         scrollWheelZoom={true}
         maxBounds={worldBounds}
         maxBoundsViscosity={1.0}
