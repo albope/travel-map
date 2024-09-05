@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import MapComponent from "./components/MapComponent";
@@ -8,7 +7,7 @@ import About from "./components/About";
 import HamburgerMenu from "./components/HamburgerMenu";
 import Blog from "./components/Blog";
 import BlogPost from "./components/BlogPost";
-import FeedbackModal from "./components/FeedbackModal"; // Importa el componente FeedbackModal
+import FeedbackModal from "./components/FeedbackModal";  // Importa el componente FeedbackModal
 import domtoimage from "dom-to-image";
 import ShareButtons from './components/ShareButtons';
 import "./index.css";
@@ -213,12 +212,12 @@ const continentMapping = {
 
 const TOTAL_COUNTRIES = 195; // Total de países
 
+
 const App = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [feedbackText, setFeedbackText] = useState(''); // Estado para el texto del feedback
-  const [feedbackType, setFeedbackType] = useState(''); // Estado para el tipo de feedback (emojis)
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false); // Estado para mostrar el modal de feedback
   const mapRef = useRef(null);
+  const feedbackButtonRef = useRef(null); // Referencia para el botón de feedback
 
   const handleCountrySelect = (countries) => {
     setSelectedCountries(countries);
@@ -317,19 +316,6 @@ const App = () => {
     }
   };
 
-  const handleFeedbackSubmit = (e) => {
-    e.preventDefault();
-
-    const subject = encodeURIComponent('User Feedback');
-    const body = encodeURIComponent(`Feedback Type: ${feedbackType}\n\nFeedback: ${feedbackText}`);
-
-    window.location.href = `mailto:albertobort@gmail.com?subject=${subject}&body=${body}`;
-
-    setShowFeedbackModal(false);
-    setFeedbackText('');
-    setFeedbackType('');
-  };
-
   return (
     <Router>
       <div>
@@ -340,7 +326,7 @@ const App = () => {
               <span>Travel-map generator</span>
             </Link>
             <div className="right-section">
-              <button className="feedback-button" onClick={() => setShowFeedbackModal(true)}>
+              <button ref={feedbackButtonRef} className="feedback-button" onClick={() => setShowFeedbackModal(true)}>
                 Feedback
               </button>
               <HamburgerMenu />
@@ -403,7 +389,6 @@ const App = () => {
                     />
                   </div>
                 </section>
-                {/* Botón de desplazamiento */}
                 <button
                   onClick={() => {
                     document.getElementById("actions-section").scrollIntoView({ behavior: 'smooth' });
@@ -436,42 +421,7 @@ const App = () => {
         </footer>
 
         {showFeedbackModal && (
-          <div className="feedback-modal-overlay">
-            <div className="feedback-modal">
-              <button className="close-modal" onClick={() => setShowFeedbackModal(false)}>X</button>
-              <h2>Leave feedback</h2>
-              <p>We'd love to hear what went well or how we can improve the product experience.</p>
-              <form onSubmit={handleFeedbackSubmit}>
-                <textarea
-                  placeholder="What if..."
-                  value={feedbackText}
-                  onChange={(e) => setFeedbackText(e.target.value)}
-                  required
-                ></textarea>
-                <div className="feedback-emojis">
-                  <button
-                    type="button"
-                    aria-label="sad"
-                    onClick={() => setFeedbackType('Sad')}
-                    className={feedbackType === 'Sad' ? 'selected' : ''}
-                  >😢</button>
-                  <button
-                    type="button"
-                    aria-label="neutral"
-                    onClick={() => setFeedbackType('Neutral')}
-                    className={feedbackType === 'Neutral' ? 'selected' : ''}
-                  >😐</button>
-                  <button
-                    type="button"
-                    aria-label="happy"
-                    onClick={() => setFeedbackType('Happy')}
-                    className={feedbackType === 'Happy' ? 'selected' : ''}
-                  >😊</button>
-                </div>
-                <button type="submit" className="submit-feedback">Submit</button>
-              </form>
-            </div>
-          </div>
+          <FeedbackModal onClose={() => setShowFeedbackModal(false)} triggerRef={feedbackButtonRef} />
         )}
       </div>
     </Router>
