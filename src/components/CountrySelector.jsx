@@ -1,334 +1,121 @@
-// src/components/CountrySelector.jsx
-import React, { useState } from "react";
-import { Tabs, Tab, Box, Checkbox, FormControlLabel, Button } from "@mui/material";
+import React, { useState, useMemo } from "react";
+import { FaSearch, FaTimesCircle, FaTimes } from 'react-icons/fa'; // Añadimos FaTimes para el icono 'x'
 import countriesData from "../data/world-110m.json";
-import './CountrySelector.css';
+import { continentMapping } from "../data/continentMapping";
 
-// Mapeo manual de países a continentes
-const continentMapping = {
-  "Afghanistan": "Asia",
-  "Albania": "Europe",
-  "Algeria": "Africa",
-  "Andorra": "Europe",
-  "Angola": "Africa",
-  "Antigua and Barbuda": "North America",
-  "Argentina": "South America",
-  "Armenia": "Asia",
-  "Australia": "Oceania",
-  "Austria": "Europe",
-  "Azerbaijan": "Asia",
-  "Bahamas": "North America",
-  "Bahrain": "Asia",
-  "Bangladesh": "Asia",
-  "Barbados": "North America",
-  "Belarus": "Europe",
-  "Belgium": "Europe",
-  "Belize": "North America",
-  "Benin": "Africa",
-  "Bhutan": "Asia",
-  "Bolivia": "South America",
-  "Bosnia and Herzegovina": "Europe",
-  "Botswana": "Africa",
-  "Brazil": "South America",
-  "Brunei": "Asia",
-  "Bulgaria": "Europe",
-  "Burkina Faso": "Africa",
-  "Burundi": "Africa",
-  "Cabo Verde": "Africa",
-  "Cambodia": "Asia",
-  "Cameroon": "Africa",
-  "Canada": "North America",
-  "Central African Republic": "Africa",
-  "Chad": "Africa",
-  "Chile": "South America",
-  "China": "Asia",
-  "Colombia": "South America",
-  "Comoros": "Africa",
-  "Congo (Congo-Brazzaville)": "Africa",
-  "Costa Rica": "North America",
-  "Croatia": "Europe",
-  "Cuba": "North America",
-  "Cyprus": "Europe",
-  "Czechia": "Europe",
-  "Democratic Republic of the Congo": "Africa",
-  "Denmark": "Europe",
-  "Djibouti": "Africa",
-  "Dominica": "North America",
-  "Dominican Republic": "North America",
-  "Ecuador": "South America",
-  "Egypt": "Africa",
-  "El Salvador": "North America",
-  "Equatorial Guinea": "Africa",
-  "Eritrea": "Africa",
-  "Estonia": "Europe",
-  "Eswatini": "Africa",
-  "Ethiopia": "Africa",
-  "Fiji": "Oceania",
-  "Finland": "Europe",
-  "France": "Europe",
-  "Gabon": "Africa",
-  "Gambia": "Africa",
-  "Georgia": "Asia",
-  "Germany": "Europe",
-  "Ghana": "Africa",
-  "Greece": "Europe",
-  "Grenada": "North America",
-  "Guatemala": "North America",
-  "Guinea": "Africa",
-  "Guinea-Bissau": "Africa",
-  "Guyana": "South America",
-  "Haiti": "North America",
-  "Holy See": "Europe",
-  "Honduras": "North America",
-  "Hungary": "Europe",
-  "Iceland": "Europe",
-  "India": "Asia",
-  "Indonesia": "Asia",
-  "Iran": "Asia",
-  "Iraq": "Asia",
-  "Ireland": "Europe",
-  "Israel": "Asia",
-  "Italy": "Europe",
-  "Jamaica": "North America",
-  "Japan": "Asia",
-  "Jordan": "Asia",
-  "Kazakhstan": "Asia",
-  "Kenya": "Africa",
-  "Kiribati": "Oceania",
-  "Kuwait": "Asia",
-  "Kyrgyzstan": "Asia",
-  "Laos": "Asia",
-  "Latvia": "Europe",
-  "Lebanon": "Asia",
-  "Lesotho": "Africa",
-  "Liberia": "Africa",
-  "Libya": "Africa",
-  "Liechtenstein": "Europe",
-  "Lithuania": "Europe",
-  "Luxembourg": "Europe",
-  "Madagascar": "Africa",
-  "Malawi": "Africa",
-  "Malaysia": "Asia",
-  "Maldives": "Asia",
-  "Mali": "Africa",
-  "Malta": "Europe",
-  "Marshall Islands": "Oceania",
-  "Mauritania": "Africa",
-  "Mauritius": "Africa",
-  "Mexico": "North America",
-  "Micronesia": "Oceania",
-  "Moldova": "Europe",
-  "Monaco": "Europe",
-  "Mongolia": "Asia",
-  "Montenegro": "Europe",
-  "Morocco": "Africa",
-  "Mozambique": "Africa",
-  "Myanmar": "Asia",
-  "Namibia": "Africa",
-  "Nauru": "Oceania",
-  "Nepal": "Asia",
-  "Netherlands": "Europe",
-  "New Zealand": "Oceania",
-  "Nicaragua": "North America",
-  "Niger": "Africa",
-  "Nigeria": "Africa",
-  "North Korea": "Asia",
-  "North Macedonia": "Europe",
-  "Norway": "Europe",
-  "Oman": "Asia",
-  "Pakistan": "Asia",
-  "Palau": "Oceania",
-  "Palestine": "Asia",
-  "Panama": "North America",
-  "Papua New Guinea": "Oceania",
-  "Paraguay": "South America",
-  "Peru": "South America",
-  "Philippines": "Asia",
-  "Poland": "Europe",
-  "Portugal": "Europe",
-  "Qatar": "Asia",
-  "Romania": "Europe",
-  "Russia": "Europe", // Parte en Asia
-  "Rwanda": "Africa",
-  "Saint Kitts and Nevis": "North America",
-  "Saint Lucia": "North America",
-  "Saint Vincent and the Grenadines": "North America",
-  "Samoa": "Oceania",
-  "San Marino": "Europe",
-  "Sao Tome and Principe": "Africa",
-  "Saudi Arabia": "Asia",
-  "Senegal": "Africa",
-  "Serbia": "Europe",
-  "Seychelles": "Africa",
-  "Sierra Leone": "Africa",
-  "Singapore": "Asia",
-  "Slovakia": "Europe",
-  "Slovenia": "Europe",
-  "Solomon Islands": "Oceania",
-  "Somalia": "Africa",
-  "South Africa": "Africa",
-  "South Korea": "Asia",
-  "South Sudan": "Africa",
-  "Spain": "Europe",
-  "Sri Lanka": "Asia",
-  "Sudan": "Africa",
-  "Suriname": "South America",
-  "Sweden": "Europe",
-  "Switzerland": "Europe",
-  "Syria": "Asia",
-  "Tajikistan": "Asia",
-  "Tanzania": "Africa",
-  "Thailand": "Asia",
-  "Timor-Leste": "Asia",
-  "Togo": "Africa",
-  "Tonga": "Oceania",
-  "Trinidad and Tobago": "North America",
-  "Tunisia": "Africa",
-  "Turkey": "Europe", // Parte en Asia
-  "Turkmenistan": "Asia",
-  "Tuvalu": "Oceania",
-  "Uganda": "Africa",
-  "Ukraine": "Europe",
-  "United Arab Emirates": "Asia",
-  "United Kingdom": "Europe",
-  "United States of America": "North America",
-  "Uruguay": "South America",
-  "Uzbekistan": "Asia",
-  "Vanuatu": "Oceania",
-  "Venezuela": "South America",
-  "Vietnam": "Asia",
-  "Yemen": "Asia",
-  "Zambia": "Africa",
-  "Zimbabwe": "Africa",
-  // Algunos territorios adicionales
-  "Saint Barthelemy": "North America",
-  "Bermuda": "North America",
-  "Federated States of Micronesia": "Oceania",
-  "Dhekelia Sovereign Base Area": "Europe",
-  "French Southern and Antarctic Lands": "Antarctica",
-  "Faroe Islands": "Europe",
-  "Guernsey": "Europe",
-  "Grenada": "North America",
-  "British Indian Ocean Territory": "Africa",
-  "Akrotiri Sovereign Base Area": "Europe",
-  "Ashmore and Cartier Islands": "Oceania",
-  "Falkland Islands": "South America",
-  "Guam": "Oceania",
-  "Heard Island and McDonald Islands": "Antarctica",
-  "Palestine": "Asia",
-  "Macau S.A.R": "Asia",
-  "Pitcairn Islands": "Oceania",
-  "Saint Pierre and Miquelon": "North America",
-  "Vatican": "Europe",
-  "United States Virgin Islands": "North America",
-  "French Polynesia": "Oceania",
-  "New Caledonia": "Oceania",
-  "Norfolk Island": "Oceania",
-  "Nauru": "Oceania",
-  "Siachen Glacier": "Asia",
-  "Samoa": "Oceania",
-  "Saint Martin": "North America",
-  "Sint Maarten": "North America",
-  "Serranilla Bank": "North America",
-  "Scarborough Reef": "Asia",
-  "Spratly Islands": "Asia",
-  "Svalbard and Jan Mayen": "Europe",
-  "US Naval Base Guantanamo Bay": "North America",
-  "Wallis and Futuna": "Oceania",
-  "Western Sahara": "Africa",
-  "Hong Kong S.A.R.": "Asia",
-  "Indian Ocean Territories": "Asia",
-  "French Southern and Antarctic Lands": "Antarctica"
-};
-
-// Definir los continentes disponibles
-const continents = ["Africa", "Asia", "North America", "South America", "Europe", "Oceania"];
-
-const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={3}>{children}</Box>}
-    </div>
-  );
-};
+const allCountries = countriesData.features
+  .map(feature => feature.properties.ADMIN)
+  .filter(name => continentMapping[name])
+  .sort();
 
 const CountrySelector = ({ onCountrySelect, selectedCountries }) => {
-  const [value, setValue] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleCountryChange = (country) => {
-    if (selectedCountries.includes(country)) {
-      const updatedCountries = selectedCountries.filter(c => c !== country);
-      onCountrySelect(updatedCountries);
-    } else {
-      const updatedCountries = [...selectedCountries, country];
-      onCountrySelect(updatedCountries);
+  const filteredCountries = useMemo(() => {
+    if (!searchTerm) {
+      return allCountries;
     }
+    return allCountries.filter(country =>
+      country.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
 
-    console.log("Países seleccionados actualizados: ", selectedCountries);
-  };
-
-  const getCountriesByContinent = (continent) => {
-    const countries = countriesData.features
-      .filter((feature) => {
-        const countryName = feature.properties.ADMIN;
-        return continentMapping[countryName] === continent;
-      })
-      .map((feature) => feature.properties.ADMIN);
-
-    return countries;
+  const handleCountryToggle = (country) => {
+    const isSelected = selectedCountries.includes(country);
+    if (isSelected) {
+      onCountrySelect(selectedCountries.filter(c => c !== country));
+    } else {
+      onCountrySelect([...selectedCountries, country]);
+    }
+    // Mejora de UX: Limpiamos la búsqueda después de seleccionar/deseleccionar un país
+    // para que el usuario vea la lista completa de nuevo.
+    setSearchTerm("");
   };
 
   const handleUnmarkAll = () => {
     onCountrySelect([]);
   };
 
+  // Ordenamos los países seleccionados alfabéticamente para una visualización consistente
+  const sortedSelectedCountries = useMemo(() => 
+    [...selectedCountries].sort(), 
+  [selectedCountries]);
+
   return (
-    <div className="country-selector">
-      <h2 className="country-selector-title">Countries I have been to..</h2>
-      <Tabs value={value} onChange={handleTabChange} aria-label="country tabs">
-        {continents.map((continent, index) => (
-          <Tab key={continent} label={continent} id={`tab-${index}`} />
-        ))}
-      </Tabs>
-      {continents.map((continent, index) => (
-        <TabPanel key={continent} value={value} index={index}>
-          <div className="country-list">
-            {getCountriesByContinent(continent).map((country) => (
-              <FormControlLabel
-                key={country}
-                control={
-                  <Checkbox
-                    checked={selectedCountries.includes(country)}
-                    onChange={() => handleCountryChange(country)}
-                    name={country}
-                  />
-                }
-                label={country}
-              />
-            ))}
+    <div className="flex flex-col h-full">
+      <h2 className="font-display text-xl font-bold text-center mb-4">Select Countries</h2>
+      
+      {/* --- Campo de Búsqueda --- */}
+      <div className="relative mb-4">
+        <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search for a country..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
+        />
+      </div>
+
+      {/* --- NUEVA SECCIÓN: Países Seleccionados --- */}
+      {sortedSelectedCountries.length > 0 && (
+        <div className="mb-4 p-2 border rounded-lg bg-gray-50 max-h-32 overflow-y-auto">
+            <div className="flex flex-wrap gap-2">
+                {sortedSelectedCountries.map(country => (
+                    <div 
+                        key={country} 
+                        className="flex items-center gap-2 bg-primary text-white text-sm font-semibold px-2 py-1 rounded-full animate-fade-in"
+                    >
+                        <span>{country}</span>
+                        <button 
+                            onClick={() => handleCountryToggle(country)} 
+                            className="text-white hover:text-accent transition-colors"
+                            aria-label={`Remove ${country}`}
+                        >
+                            <FaTimes size={12} />
+                        </button>
+                    </div>
+                ))}
+            </div>
+        </div>
+      )}
+
+      {/* --- Lista de Países para Seleccionar --- */}
+      <div className="flex-grow border rounded-lg p-2 bg-gray-50 max-h-60 overflow-y-auto">
+        {filteredCountries.length > 0 ? (
+          <div className="grid grid-cols-1 gap-1">
+            {filteredCountries.map((country) => {
+              const isSelected = selectedCountries.includes(country);
+              return (
+                <button
+                  key={country}
+                  onClick={() => handleCountryToggle(country)}
+                  className={`w-full text-left p-2 rounded-md text-sm transition-colors duration-150 ${
+                    isSelected
+                      ? 'bg-accent text-white font-semibold'
+                      : 'text-text-main hover:bg-gray-200'
+                  }`}
+                >
+                  {country}
+                </button>
+              );
+            })}
           </div>
-        </TabPanel>
-      ))}
-<Button
-  variant="contained"
-  color="primary"
-  onClick={handleUnmarkAll}
-  style={{ marginTop: "20px" }}
->
-  Unmark All Countries
-</Button>
+        ) : (
+          <p className="text-center text-gray-500 py-8">No countries found.</p>
+        )}
+      </div>
+
+      {/* --- Botón para desmarcar todos --- */}
+      {selectedCountries.length > 0 && (
+          <button
+            onClick={handleUnmarkAll}
+            className="mt-4 w-full flex items-center justify-center gap-2 text-sm text-red-600 hover:text-red-800 font-semibold transition-colors"
+          >
+            <FaTimesCircle />
+            Unmark All ({selectedCountries.length})
+          </button>
+      )}
     </div>
   );
 };

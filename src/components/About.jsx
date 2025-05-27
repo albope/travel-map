@@ -1,77 +1,79 @@
-// src/components/About.jsx
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'; // Correcto: faGithub y faLinkedin están en 'free-brands-svg-icons'
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons'; // Correcto: faEnvelope está en 'free-solid-svg-icons'
+import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+
+const FaqItem = ({ question, children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border-b border-gray-200 py-4">
+      <button
+        className="w-full flex justify-between items-center text-left text-lg font-semibold text-text-main focus:outline-none"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span>{question}</span>
+        <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+          ▼
+        </span>
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 mt-4' : 'max-h-0'}`}>
+        <div className="text-gray-600">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 const About = () => {
-  // Estado para manejar el toggle de las preguntas frecuentes
-  const [faqOpen, setFaqOpen] = useState({});
-
-  const toggleFAQ = (index) => {
-    setFaqOpen(prevState => ({ ...prevState, [index]: !prevState[index] }));
-  };
-
   return (
-    <div className="about-container">
-      <h2>About this Project</h2>
-      <p>
-        Welcome to the Travel-Map Generator, a project created to help you visualize and share your travel adventures with friends and family.
-      </p>
-      <p>
-        This project is a result of my passion for development and travel, created during my spare time.
-      </p>
+    <div className="bg-white">
+      <div className="container mx-auto px-4 py-12 md:py-20">
+        
+        {/* --- Sección de Introducción --- */}
+        <div className="text-center max-w-3xl mx-auto">
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-4">About This Project</h1>
+          <p className="text-lg text-gray-600 mb-12">
+            Welcome to the Travel-Map Generator, a passion project designed to help you visualize and share your travel adventures with friends and family.
+          </p>
+        </div>
 
-      {/* Sección de FAQ */}
-      <section className="faq-section">
-        <h2>Frequently Asked Questions</h2>
-        <div className="faq-item">
-          <h3 onClick={() => toggleFAQ(1)}>What is the purpose of this project?</h3>
-          <p className={faqOpen[1] ? 'open' : 'closed'}>
-            This project helps you visualize and share your travel adventures with friends and family.
-          </p>
+        {/* --- Sección de FAQ --- */}
+        <div className="max-w-3xl mx-auto mb-16">
+            <h2 className="font-display text-3xl font-bold text-text-main mb-6 text-center">Frequently Asked Questions</h2>
+            <FaqItem question="What is the purpose of this project?">
+                <p>This project helps you visualize your travel adventures. You can select the countries you have visited, generate a customized map, view statistics, and share your journey.</p>
+            </FaqItem>
+            <FaqItem question="How can I use the travel map generator?">
+                <p>Simply use the interactive list or click on the map to select the countries you have visited. The map and your stats will update automatically.</p>
+            </FaqItem>
+            <FaqItem question="Can I download or share the map?">
+                 <p>Yes, on the main page, you'll find options to download your personalized map as a PNG file or share a link to your travels on social media.</p>
+            </FaqItem>
+             <FaqItem question="Why are there 195 countries on the map?">
+                <p>The total of 195 countries is based on the list recognized by the United Nations, which includes 193 member states and 2 observer states.</p>
+            </FaqItem>
         </div>
-        <div className="faq-item">
-          <h3 onClick={() => toggleFAQ(2)}>How can I use the travel map generator?</h3>
-          <p className={faqOpen[2] ? 'open' : 'closed'}>
-            Simply select the countries you have visited, and the map will update automatically.
-          </p>
-        </div>
-        <div className="faq-item">
-          <h3 onClick={() => toggleFAQ(3)}>Can I download the map?</h3>
-          <p className={faqOpen[3] ? 'open' : 'closed'}>
-            Yes, you can download the map in PNG format using the download button provided.
-          </p>
-        </div>
-        <div className="faq-item">
-          <h3 onClick={() => toggleFAQ(4)}>Why are there 195 countries on the map?</h3>
-          <p className={faqOpen[4] ? 'open' : 'closed'}>
-            The total of 195 countries is based on the list recognized by the United Nations, which includes 193 member states and 2 observer states.
-          </p>
-        </div>
-        <div className="faq-item">
-          <h3 onClick={() => toggleFAQ(5)}>Can I reset the map after selecting countries?</h3>
-          <p className={faqOpen[5] ? 'open' : 'closed'}>
-            Yes, you can clear your selections and start over using the reset button.
-          </p>
-        </div>
-      </section>
 
-      {/* Sección de contacto resaltada */}
-      <section className="contact-section">
-        <h2>Contact Me</h2>
-        <div className="contact-box">
-          <p>Email: <a href="mailto:albertobort@gmail.com" className="email-link">albertobort@gmail.com</a></p>
-          <p>LinkedIn: <a href="https://www.linkedin.com/in/albertobort" target="_blank" rel="noopener noreferrer">linkedin.com/in/albertobort</a></p>
-          <p>GitHub: <a href="https://github.com/albope/travel-map" target="_blank" rel="noopener noreferrer" className="email-link">
-            github.com/albope/travel-map
-          </a></p>
+        {/* --- Sección de Contacto --- */}
+        <div className="text-center max-w-3xl mx-auto">
+            <h2 className="font-display text-3xl font-bold text-text-main mb-6">Contact Me</h2>
+            <p className="text-lg text-gray-600 mb-8">
+                Have questions, suggestions, or just want to connect? Feel free to reach out!
+            </p>
+            <div className="flex justify-center items-center gap-6">
+                <a href="https://github.com/albope/travel-map" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors duration-300">
+                    <FaGithub size={32} />
+                </a>
+                <a href="https://www.linkedin.com/in/albertobort" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors duration-300">
+                    <FaLinkedin size={32} />
+                </a>
+                <a href="mailto:albertobort@gmail.com" className="text-gray-500 hover:text-primary transition-colors duration-300">
+                    <FaEnvelope size={32} />
+                </a>
+            </div>
         </div>
-      </section>
 
-      <p>
-        Stay connected with me for updates and new features!
-      </p>
+      </div>
     </div>
   );
 };
