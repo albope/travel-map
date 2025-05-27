@@ -1,109 +1,114 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MapContainer, TileLayer, GeoJSON, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import countriesData from "../data/world-110m.json";
 import { FaSyncAlt } from "react-icons/fa";
 
-const ResetZoomControl = ({ initialZoom, initialCenter }) => {
+// ResetZoomControl (sin cambios respecto a la última versión que te di)
+const ResetZoomControl = ({ map, initialZoom, initialCenter }) => {
   const [showButton, setShowButton] = useState(false);
-  const map = useMapEvents({
-    zoomend: () => setShowButton(map.getZoom() !== initialZoom),
-    moveend: () => setShowButton(map.getZoom() !== initialZoom)
-  });
 
   useEffect(() => {
-    // Establece el estado inicial del botón al montar
-    if (map) { // Asegúrate de que map esté inicializado
-        setShowButton(map.getZoom() !== initialZoom);
-    }
-  }, [map, initialZoom]);
+    if (!map) return;
+    const updateShowButton = () => {
+      if (map.getZoom() !== initialZoom) {
+        setShowButton(true);
+      } else {
+        const currentCenter = map.getCenter();
+        if (currentCenter.lat !== initialCenter[0] || currentCenter.lng !== initialCenter[1]) {
+          setShowButton(true);
+        } else {
+          setShowButton(false);
+        }
+      }
+    };
+    map.on('zoomend', updateShowButton);
+    map.on('moveend', updateShowButton);
+    updateShowButton();
+    return () => {
+      map.off('zoomend', updateShowButton);
+      map.off('moveend', updateShowButton);
+    };
+  }, [map, initialZoom, initialCenter]);
 
-  if (!showButton) return null;
+  if (!showButton || !map) return null;
 
   return (
     <div className="leaflet-top leaflet-left">
-      <div className="leaflet-control leaflet-bar leaflet-control-zoom">
+      <div className="leaflet-control mt-2.5"> 
         <button
           onClick={() => map.setView(initialCenter, initialZoom)}
           title="Reset Zoom"
-          className="leaflet-control-zoom-in"
-          style={{ fontSize: '1.2em', lineHeight: '1.4' }}
+          className="flex items-center justify-center w-[30px] h-[30px] bg-white text-gray-700 border border-gray-300 rounded shadow-md hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          <FaSyncAlt />
+          <FaSyncAlt size={14} />
         </button>
       </div>
     </div>
   );
 };
 
-const MapComponent = ({ selectedCountries, onCountrySelect }) => {
-  // No necesitamos geoJsonRef si no vamos a manipular las capas imperativamente
-  // const geoJsonRef = useRef(null); 
+
+const MapComponent = ({ selectedCountries, onCountrySelect, onMapReady }) => {
   const initialCenter = [20, 0];
   const initialZoom = window.innerWidth < 768 ? 1 : 2;
+  const minZoomForUserInteraction = 2;
+  const mapRef = useRef(null);
 
-  // styleFeature ahora depende de selectedCountries.
-  // Cuando selectedCountries cambia, se crea una nueva instancia de styleFeature.
+  // CAMBIO PRINCIPAL AQUÍ:
   const styleFeature = useCallback((feature) => {
     const countryName = feature.properties.ADMIN;
     const isSelected = selectedCountries.includes(countryName);
     return {
-      fillColor: isSelected ? "#FF6B6B" : "#A8DADC",
-      fillOpacity: 0.7,
-      color: isSelected ? "#C0392B" : "#1D3557",
-      weight: 1,
+      fillColor: isSelected ? "#FF6B6B" : "transparent", // <--- PAÍSES NO SELECCIONADOS TRANSPARENTES
+      fillOpacity: isSelected ? 0.7 : 0,             // <--- Opacidad 0 para el relleno transparente
+      color: isSelected ? "#C0392B" : "#6B7280",     // <--- Borde para seleccionados y un gris para no seleccionados
+      weight: isSelected ? 1.5 : 0.5,                     // <--- Peso del borde (más fino para no seleccionados)
     };
   }, [selectedCountries]);
-
-  // Eliminamos el useEffect que recorría geoJsonRef.current.eachLayer(...)
-  // Ahora confiamos en la 'key' del GeoJSON para forzar el re-renderizado con el nuevo estilo.
 
   const onEachCountry = useCallback((country, layer) => {
     const countryName = country.properties.ADMIN;
     layer.bindPopup(countryName);
-
     layer.off('mouseover mouseout click'); 
     layer.on({
       mouseover: (e) => e.target.setStyle({ weight: 2.5, fillOpacity: 0.9 }),
-      mouseout: (e) => {
-        // Al salir, aplicamos el estilo que corresponde según el estado actual.
-        // Esto es importante para que no se quede el estilo de hover.
-        const currentStyle = styleFeature(e.target.feature);
-        e.target.setStyle(currentStyle);
-      },
+      mouseout: (e) => e.target.setStyle(styleFeature(e.target.feature)),
       click: () => {
         if (!onCountrySelect) return;
         onCountrySelect(countryName); 
       }
     });
-  }, [onCountrySelect, styleFeature]); // styleFeature depende de selectedCountries
+  }, [onCountrySelect, styleFeature]);
+
+  useEffect(() => {
+    if (mapRef.current && onMapReady) {
+      onMapReady(mapRef.current);
+    }
+  }, [mapRef, onMapReady]);
 
   return (
     <MapContainer
+      ref={mapRef}
       center={initialCenter}
       zoom={initialZoom}
-      style={{ height: "600px", width: "100%" }}
+      style={{ height: "500px", width: "100%" }}
       className="leaflet-container"
-      minZoom={2}
-      zoomControl={true}
+      minZoom={minZoomForUserInteraction} 
+      zoomControl={true} 
       scrollWheelZoom={true}
     >
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+        attribution='&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <GeoJSON
-        // data no cambia, así que no necesita ser una dependencia de la key
         data={countriesData.features}
-        style={styleFeature} // Esta función se usará al (re)crear la capa
+        style={styleFeature} 
         onEachFeature={onEachCountry}
-        // ESTA KEY ES CRUCIAL:
-        // Cuando selectedCountries cambia, styleFeature y onEachCountry se recrean (por useCallback).
-        // Al cambiar la key, React desmonta el GeoJSON viejo y monta uno nuevo,
-        // forzando a que use las nuevas funciones styleFeature y onEachCountry.
         key={JSON.stringify(selectedCountries)} 
       />
-      <ResetZoomControl initialZoom={initialZoom} initialCenter={initialCenter} />
+      {mapRef.current && <ResetZoomControl map={mapRef.current} initialZoom={initialZoom} initialCenter={initialCenter} />}
     </MapContainer>
   );
 };
