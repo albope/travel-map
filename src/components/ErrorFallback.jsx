@@ -1,29 +1,35 @@
 import React from 'react';
-import { FaExclamationTriangle } from 'react-icons/fa';
+import { FaRedo, FaExclamationTriangle } from 'react-icons/fa';
 
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen bg-background text-text-main p-8"
-      role="alert"
-    >
-      <div className="text-center bg-white p-10 rounded-lg shadow-2xl max-w-lg">
-        <FaExclamationTriangle className="mx-auto text-5xl text-red-500 mb-6" />
-        <h1 className="font-display text-3xl font-bold text-primary mb-4">
-          Oops! Something went wrong.
-        </h1>
-        <p className="text-gray-600 mb-6">
-          An unexpected error occurred. Our team has been notified, but you can try refreshing the application.
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border border-slate-100 animate-fade-in">
+        <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+          <FaExclamationTriangle className="text-4xl" />
+        </div>
+        
+        <h2 className="font-display text-2xl font-bold text-slate-800 mb-2">
+          Ups, algo salió mal
+        </h2>
+        
+        <p className="text-slate-500 mb-6 leading-relaxed">
+          Lo sentimos, ha ocurrido un error inesperado. Hemos registrado el problema para solucionarlo.
         </p>
-        {/* Este pre-formateado es útil para ver el error en desarrollo */}
-        <pre className="text-left bg-gray-100 text-red-700 text-xs p-4 rounded-md overflow-auto mb-8">
-          {error.message}
-        </pre>
+
+        {/* Mensaje técnico opcional (útil para desarrollo) */}
+        {process.env.NODE_ENV === 'development' && (
+           <pre className="text-xs text-left bg-slate-900 text-red-300 p-4 rounded-xl mb-6 overflow-auto max-h-32">
+             {error.message}
+           </pre>
+        )}
+
         <button
           onClick={resetErrorBoundary}
-          className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-hover transition-colors duration-300"
+          className="w-full bg-primary text-white font-bold py-3 px-6 rounded-xl hover:bg-primary-hover hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95"
         >
-          Try Again
+          <FaRedo />
+          Intentar de nuevo
         </button>
       </div>
     </div>

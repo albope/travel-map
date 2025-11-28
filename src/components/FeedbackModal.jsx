@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import emailjs from 'emailjs-com';
-import { FaTimes, FaSpinner, FaCheckCircle, FaRegpaperPlane } from 'react-icons/fa';
+import { FaTimes, FaSpinner, FaCheckCircle, FaPaperPlane } from 'react-icons/fa';
 
 const FeedbackModal = ({ onClose }) => {
   const [feedbackType, setFeedbackType] = useState('');
@@ -20,8 +20,6 @@ const FeedbackModal = ({ onClose }) => {
   const sendFeedback = (e) => {
     e.preventDefault();
     if (!feedbackType || !message) {
-      // Usamos un borde rojo temporal o animación en lugar de alert() nativo si es posible,
-      // pero por simplicidad mantenemos la lógica, mejorando la UX visualmente.
       return;
     }
     setSubmitting(true);
@@ -144,7 +142,7 @@ const FeedbackModal = ({ onClose }) => {
                   {submitting ? (
                     <> <FaSpinner className="animate-spin" /> Enviando... </>
                   ) : (
-                    <> Enviar Comentarios <FaRegpaperPlane size={14} /> </>
+                    <> Enviar Comentarios <FaPaperPlane size={14} /> </>
                   )}
                 </button>
               </form>
