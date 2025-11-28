@@ -1,80 +1,87 @@
 import React, { useState } from 'react';
-import { FaGlobeEurope, FaFlag, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaGlobeAmericas, FaFlag, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css'; // Estilos necesarios para la librería
+import 'react-circular-progressbar/dist/styles.css';
 
 const StatsCard = ({ continents, countries, percentage, visitedCountries }) => {
-  const [showCountries, setShowCountries] = useState(false);
-
-  const toggleCountriesVisibility = () => {
-    setShowCountries(!showCountries);
-  };
-
+  const [isExpanded, setIsExpanded] = useState(false);
   const percentageValue = parseFloat(percentage) || 0;
 
   return (
-    <div>
-      <h2 className="font-display text-xl font-bold text-center mb-6">My Travel Stats</h2>
-
-      {/* --- Contenedor principal de estadísticas --- */}
-      <div className="flex flex-col sm:flex-row items-center gap-6">
-
-        {/* --- Gráfico Circular --- */}
-        <div className="w-32 h-32 flex-shrink-0">
+    <div className="w-full">
+      {/* Header Stats Grid */}
+      <div className="flex items-center gap-6 mb-6">
+        
+        {/* Gráfico Circular Minimalista */}
+        <div className="w-20 h-20 flex-shrink-0 relative">
           <CircularProgressbar
             value={percentageValue}
-            text={`${percentage}%`}
+            strokeWidth={10}
             styles={buildStyles({
-              // Colores de la paleta de Tailwind
-              pathColor: `rgba(255, 107, 107, ${percentageValue / 100})`, // accent color
-              textColor: '#0A3641', // primary color
-              trailColor: '#e2e8f0',
-              backgroundColor: '#3e98c7',
+              pathColor: '#0F766E', // Primary Teal
+              textColor: 'transparent',
+              trailColor: '#F1F5F9', // Slate 100
+              strokeLinecap: 'round',
             })}
           />
-           <p className="text-center text-sm text-gray-500 mt-2">of the world</p>
+          {/* Texto centralizado absoluto para mejor control */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-primary-hover">
+            <span className="text-sm font-bold leading-none">{percentageValue}%</span>
+            <span className="text-[10px] text-slate-400 font-medium">WORLD</span>
+          </div>
         </div>
 
-        {/* --- Estadísticas de Continentes y Países --- */}
-        <div className="flex-grow grid grid-cols-2 gap-4 w-full">
-            <div className="text-center">
-                <FaGlobeEurope className="mx-auto text-3xl text-primary mb-2" />
-                <p className="text-4xl font-bold font-display text-text-main">{continents}</p>
-                <p className="text-sm text-gray-500">Continents</p>
+        {/* Métricas Numéricas */}
+        <div className="flex-grow grid grid-cols-2 gap-4">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">
+              <FaFlag /> Países
             </div>
-             <div className="text-center">
-                <FaFlag className="mx-auto text-3xl text-primary mb-2" />
-                <p className="text-4xl font-bold font-display text-text-main">{countries}</p>
-                <p className="text-sm text-gray-500">Countries</p>
+            <span className="text-2xl font-display font-bold text-slate-800">
+              {countries}
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">
+              <FaGlobeAmericas /> Continentes
             </div>
+            <span className="text-2xl font-display font-bold text-slate-800">
+              {continents}
+            </span>
+          </div>
         </div>
       </div>
-      
-      {/* --- Lista de Países Visitados (colapsable) --- */}
-      <div className="mt-6">
+
+      {/* Lista Desplegable (Acordeón) */}
+      <div className="border-t border-slate-100 pt-2">
         <button
-          className="w-full text-left py-2 px-3 flex justify-between items-center rounded-md hover:bg-gray-100 transition-colors"
-          onClick={toggleCountriesVisibility}
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full flex items-center justify-between py-2 text-sm text-slate-500 hover:text-primary transition-colors group"
         >
-          <span className="font-semibold text-text-main">
-            {showCountries ? 'Hide' : 'Show'} Visited Countries ({visitedCountries.length})
+          <span className="font-medium group-hover:underline">
+            Ver lista detallada
           </span>
-          {showCountries ? <FaChevronUp className="text-gray-500" /> : <FaChevronDown className="text-gray-500" />}
+          {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
         </button>
 
-        {showCountries && (
-          <div className="mt-2 p-3 bg-gray-50 rounded-md max-h-40 overflow-y-auto">
-            {visitedCountries.length > 0 ? (
-              <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
-                {visitedCountries.sort().map((country) => (
-                  <li key={country} className="text-sm text-gray-700 truncate">{country}</li>
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-60 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+          {visitedCountries.length > 0 ? (
+            <div className="bg-slate-50 rounded-lg p-3 overflow-y-auto max-h-60 custom-scrollbar">
+              <ul className="grid grid-cols-2 gap-x-2 gap-y-1">
+                {[...visitedCountries].sort().map((country) => (
+                  <li key={country} className="text-xs text-slate-600 truncate flex items-center gap-1">
+                    <span className="w-1 h-1 rounded-full bg-primary/40"></span>
+                    {country}
+                  </li>
                 ))}
               </ul>
-            ) : (
-              <p className="text-sm text-gray-500 text-center py-4">Select some countries to see them here.</p>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <p className="text-xs text-slate-400 italic text-center py-2">
+              Aún no has seleccionado ningún país.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
