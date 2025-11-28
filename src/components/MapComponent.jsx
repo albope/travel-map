@@ -1,123 +1,159 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import countriesData from "../data/world-110m.json"; // Ajusta la ruta si es necesario
-import { FaSyncAlt } from "react-icons/fa";
+import countriesData from "../data/world-110m.json"; 
+import { FaCompressArrowsAlt } from "react-icons/fa";
 
-const ResetZoomControl = ({ map, initialZoom, initialCenter }) => {
-  const [showButton, setShowButton] = useState(false);
+// Botón de Reset Flotante
+const ResetZoomControl = ({ map, initialCenter, initialZoom }) => {
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (!map) return;
-    const updateShowButton = () => {
-      let shouldShow = false;
-      if (map.getZoom() !== initialZoom) {
-        shouldShow = true;
-      } else {
-        const currentCenter = map.getCenter();
-        if (currentCenter.lat !== initialCenter[0] || currentCenter.lng !== initialCenter[1]) {
-          shouldShow = true;
-        }
-      }
-      setShowButton(shouldShow);
+    
+    const checkState = () => {
+      const currentZoom = map.getZoom();
+      const currentCenter = map.getCenter();
+      const isMoved = 
+        currentZoom !== initialZoom || 
+        Math.abs(currentCenter.lat - initialCenter[0]) > 0.1 || 
+        Math.abs(currentCenter.lng - initialCenter[1]) > 0.1;
+      
+      setIsVisible(isMoved);
     };
-    map.on('zoomend', updateShowButton);
-    map.on('moveend', updateShowButton);
-    updateShowButton();
-    return () => {
-      map.off('zoomend', updateShowButton);
-      map.off('moveend', updateShowButton);
-    };
-  }, [map, initialZoom, initialCenter]);
 
-  if (!showButton || !map) return null;
+    map.on('zoomend moveend', checkState);
+    return () => map.off('zoomend moveend', checkState);
+  }, [map, initialCenter, initialZoom]);
+
+  if (!isVisible) return null;
 
   return (
-    <div className="leaflet-top leaflet-left">
-      <div className="leaflet-control mt-2.5">
-        <button
-          onClick={() => map.setView(initialCenter, initialZoom)}
-          title="Reset Zoom"
-          className="flex items-center justify-center w-[30px] h-[30px] bg-white text-gray-700 border border-gray-300 rounded shadow-md hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          <FaSyncAlt size={14} />
-        </button>
-      </div>
-    </div>
+    <button
+      onClick={() => map.setView(initialCenter, initialZoom, { animate: true })}
+      className="absolute top-4 right-4 z-[400] bg-white text-text-main p-2 rounded-lg shadow-card hover:bg-slate-50 text-xs font-bold tracking-wide flex items-center gap-2 transition-all transform hover:scale-105 border border-slate-100"
+    >
+      <FaCompressArrowsAlt />
+      <span>RESET</span>
+    </button>
   );
 };
 
 const MapComponent = ({ selectedCountries, onCountrySelect, onMapReady }) => {
-  const initialCenter = [20, 0];
-  const initialZoom = window.innerWidth < 768 ? 1 : 2;
-  const minZoomForUserInteraction = 2;
   const mapRef = useRef(null);
+  
+  // --- SOLUCIÓN AL BUG DEL COLOR (STALE CLOSURE) ---
+  // Creamos una referencia que SIEMPRE tiene el valor actual de selectedCountries.
+  // Los eventos del mapa leerán de aquí en lugar de la prop directamente.
+  const selectedCountriesRef = useRef(selectedCountries);
 
-  const styleFeature = useCallback((feature) => {
-    const countryName = feature.properties.ADMIN;
-    const isSelected = selectedCountries.includes(countryName);
-    if (isSelected) {
-        return { 
-            fillColor: "#FF6B6B", 
-            fillOpacity: 0.7,
-            color: "#C0392B",     
-            weight: 1.5,
-        };
-    } else {
-        return { 
-            fillOpacity: 0,      
-            opacity: 0.3, 
-            color: "#A0AEC0", 
-            weight: 0.5,     
-        };
-    }
+  useEffect(() => {
+    selectedCountriesRef.current = selectedCountries;
+  }, [selectedCountries]);
+  // --------------------------------------------------
+
+  const initialCenter = [20, 0];
+  const initialZoom = window.innerWidth < 768 ? 1.5 : 2;
+  const minZoom = 1.5;
+
+  // Función auxiliar para obtener estilos (pura)
+  const getFeatureStyle = (feature, countryList) => {
+    const isSelected = countryList.includes(feature.properties.ADMIN);
+    return {
+      fillColor: isSelected ? "#0F766E" : "transparent",
+      fillOpacity: isSelected ? 0.8 : 0,
+      color: isSelected ? "#0D9488" : "#94A3B8",
+      weight: isSelected ? 1 : 0.5,
+      dashArray: isSelected ? "" : "3",
+    };
+  };
+
+  // Estilo para el renderizado inicial de React
+  const getStyle = useCallback((feature) => {
+    return getFeatureStyle(feature, selectedCountries);
   }, [selectedCountries]);
 
-  const onEachCountry = useCallback((country, layer) => {
-    const countryName = country.properties.ADMIN;
-    layer.bindPopup(countryName);
-    layer.off('mouseover mouseout click');
+  const onEachFeature = useCallback((feature, layer) => {
+    const countryName = feature.properties.ADMIN;
+    
+    layer.bindTooltip(countryName, { 
+      sticky: true, 
+      className: 'bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded border-0 shadow-lg' 
+    });
+
     layer.on({
-      mouseover: (e) => e.target.setStyle({ weight: 2.5, fillOpacity: 0.9 }),
+      mouseover: (e) => {
+        const layer = e.target;
+        // Leemos de la REF para saber si ESTE país está seleccionado AHORA MISMO
+        const isSelected = selectedCountriesRef.current.includes(countryName);
+        
+        layer.setStyle({
+          fillOpacity: 0.9,
+          weight: 2,
+          color: isSelected ? "#115E59" : "#64748B",
+          fillColor: isSelected ? "#0F766E" : "#E2E8F0"
+        });
+        layer.bringToFront();
+      },
       mouseout: (e) => {
-        e.target.setStyle(styleFeature(e.target.feature));
+        const layer = e.target;
+        // IMPORTANTE: Al salir el ratón, restauramos el estilo basándonos en la REF actualizada.
+        // Esto evita que se "borre" el color verde si acabamos de seleccionarlo.
+        const currentStyle = getFeatureStyle(feature, selectedCountriesRef.current);
+        layer.setStyle(currentStyle);
       },
       click: () => {
-        if (!onCountrySelect) return;
-        onCountrySelect(countryName);
+        // Ejecutamos la acción de selección
+        if (onCountrySelect) onCountrySelect(countryName);
       }
     });
-  }, [onCountrySelect, styleFeature]);
+  }, [onCountrySelect]); // Ya no dependemos de selectedCountries ni getStyle aquí, evitando re-renders masivos del mapa
 
   useEffect(() => {
     if (mapRef.current && onMapReady) {
       onMapReady(mapRef.current);
     }
-  }, [mapRef, onMapReady]);
+  }, [onMapReady]);
 
   return (
-    <MapContainer
-      ref={mapRef}
-      center={initialCenter}
-      zoom={initialZoom}
-      style={{ height: "500px", width: "100%" }}
-      className="leaflet-container"
-      minZoom={minZoomForUserInteraction}
-      zoomControl={true}
-      scrollWheelZoom={true}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" // <-- OpenStreetMap Tiles
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <GeoJSON
-        data={countriesData.features}
-        style={styleFeature}
-        onEachFeature={onEachCountry}
-        key={JSON.stringify(selectedCountries)}
-      />
-      {mapRef.current && <ResetZoomControl map={mapRef.current} initialZoom={initialZoom} initialCenter={initialCenter} />}
-    </MapContainer>
+    <div className="relative w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden shadow-inner bg-slate-100 border border-slate-200">
+      <MapContainer
+        ref={mapRef}
+        center={initialCenter}
+        zoom={initialZoom}
+        minZoom={minZoom}
+        style={{ height: "100%", width: "100%", background: "transparent" }}
+        zoomControl={false}
+        scrollWheelZoom={true}
+        className="outline-none"
+      >
+        <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        />
+
+        <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
+          zIndex={500}
+        />
+
+        <GeoJSON
+          data={countriesData.features}
+          style={getStyle}
+          onEachFeature={onEachFeature}
+        />
+
+        <ZoomControl position="bottomright" />
+        
+        {mapRef.current && (
+          <ResetZoomControl 
+            map={mapRef.current} 
+            initialCenter={initialCenter} 
+            initialZoom={initialZoom} 
+          />
+        )}
+      </MapContainer>
+    </div>
   );
 };
 

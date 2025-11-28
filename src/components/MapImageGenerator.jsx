@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback } from 'react';
 import { MapContainer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import countriesData from '../data/world-110m.json'; // Ajusta la ruta si es necesario
+import countriesData from '../data/world-110m.json';
 
 const MapImageGenerator = forwardRef((
   { 
@@ -10,94 +10,108 @@ const MapImageGenerator = forwardRef((
     visitedPercentage 
   }, ref) => {
     
+  // Configuración estática para la imagen
   const initialCenter = [20, 0];
-  // Un zoom que muestre bien el mundo sin tiles. Puedes ajustarlo.
-  // Si el mapa se ve muy pequeño o muy grande en el PNG, este es un buen lugar para ajustar.
-  const initialZoomForImage = 1.5; 
+  const initialZoom = 1.6;
 
-  // Estilo específico para la imagen PNG:
-  // Países seleccionados en rojo, no seleccionados en un color base sólido.
-  const styleFeatureForImage = useCallback((feature) => {
-    const countryName = feature.properties.ADMIN;
-    const isSelected = selectedCountries.includes(countryName);
+  // Estilo minimalista para exportación
+  const styleFeature = useCallback((feature) => {
+    const isSelected = selectedCountries.includes(feature.properties.ADMIN);
     return {
-      fillColor: isSelected ? "#FF6B6B" : "#E5E7EB", // Rojo para seleccionados, un gris más claro (Tailwind gray-200) para no seleccionados
-      fillOpacity: 1, // Opacidad completa para ambos
-      color: isSelected ? "#C0392B" : "#9CA3AF", // Borde rojo oscuro o un gris medio (Tailwind gray-400)
-      weight: isSelected ? 1 : 0.5,
+      fillColor: isSelected ? "#0F766E" : "#F1F5F9", // Primary Teal vs Slate-100
+      fillOpacity: 1,
+      color: isSelected ? "#0F766E" : "#CBD5E1", // Borde igual al relleno o Slate-300
+      weight: isSelected ? 0 : 0.5, // Sin borde en seleccionados para look "plano" moderno
     };
   }, [selectedCountries]);
 
-  // Preparamos la lista de países para mostrarla, ordenada
   const sortedSelectedCountries = [...selectedCountries].sort();
 
   return (
-    // Contenedor principal para la imagen.
-    // El ancho es fijo para consistencia, la altura es auto para acomodar la lista de países.
-    // Clases de Tailwind para padding, color de fondo, y centrado de texto.
-    // Estilos en línea para la fuente base y el ancho.
-    <div 
+    <div className="fixed left-[-9999px]"> {/* Oculto visualmente pero renderizable */}
+      <div 
         ref={ref} 
-        className="bg-background p-6 text-center" 
-        style={{ width: '1000px', height: 'auto', fontFamily: 'Lato, Arial, sans-serif' }} 
-    >
-        {/* Título */}
-        <h1 
-            className="font-display text-3xl font-bold text-primary mb-2"
-        >
-            My Travel Map
-        </h1>
-
-        {/* Subtítulo con estadísticas */}
-        <p 
-            className="text-md text-gray-700 mb-4" // text-gray-700 para un poco más de contraste
-        >
-            {visitedCountriesCount} countries visited - <span className="font-bold">{visitedPercentage}%</span> of the world!
-        </p>
-
-        {/* Contenedor del Mapa */}
-        {/* Damos un ancho y alto fijos al contenedor del mapa para la imagen */}
-        <div style={{ width: '952px', height: '480px', margin: '0 auto 20px auto', border: '1px solid #D1D5DB', borderRadius: '0.5rem', overflow: 'hidden' }}>
-            <MapContainer
-                center={initialCenter}
-                zoom={initialZoomForImage}
-                style={{ width: '100%', height: '100%' }}
-                className="leaflet-container-for-image" // Puedes usar esta clase para anular estilos de Leaflet si es necesario solo para la imagen
-                zoomControl={false} 
-                attributionControl={false}
-                scrollWheelZoom={false}
-                dragging={false}
-                doubleClickZoom={false}
-                // Estas opciones pueden ayudar a que el mapa se renderice mejor para la captura
-                preferCanvas={true} // Intenta renderizar en canvas si es posible
-            >
-                {/* NO HAY TILELAYER AQUÍ, solo el GeoJSON sobre el bg-background */}
-                <GeoJSON
-                    data={countriesData.features}
-                    style={styleFeatureForImage}
-                    // No necesitamos onEachFeature porque no es interactivo
-                />
-            </MapContainer>
+        className="bg-white p-12 flex flex-col items-center" 
+        style={{ 
+          width: '1200px', // Ancho fijo HD
+          fontFamily: "'Poppins', sans-serif" // Aseguramos fuente en export
+        }} 
+      >
+        {/* Header de la Tarjeta */}
+        <div className="w-full flex justify-between items-end border-b-2 border-slate-100 pb-6 mb-8">
+          <div className="text-left">
+            <h1 className="text-5xl font-bold text-slate-900 tracking-tight">
+              My Travel Map
+            </h1>
+            <p className="text-xl text-slate-500 mt-2 font-medium">
+              Alberto's World Adventures
+            </p>
+          </div>
+          
+          {/* Stats Badge */}
+          <div className="flex gap-6">
+            <div className="text-right">
+              <span className="block text-4xl font-bold text-teal-700">{visitedCountriesCount}</span>
+              <span className="text-sm text-slate-400 uppercase tracking-wider font-bold">Countries</span>
+            </div>
+            <div className="text-right">
+              <span className="block text-4xl font-bold text-teal-700">{visitedPercentage}%</span>
+              <span className="text-sm text-slate-400 uppercase tracking-wider font-bold">World</span>
+            </div>
+          </div>
         </div>
 
-        {/* Lista de Países Visitados (solo si hay países seleccionados) */}
+        {/* Mapa Limpio */}
+        <div 
+          className="relative rounded-3xl overflow-hidden border-4 border-slate-100"
+          style={{ width: '1100px', height: '600px', margin: '0 auto' }}
+        >
+          <MapContainer
+            center={initialCenter}
+            zoom={initialZoom}
+            zoomControl={false}
+            attributionControl={false}
+            style={{ width: '100%', height: '100%', background: '#F8FAFC' }} // Fondo Slate-50
+            preferCanvas={true}
+          >
+            <GeoJSON
+              data={countriesData.features}
+              style={styleFeature}
+            />
+          </MapContainer>
+        </div>
+
+        {/* Footer / Lista de Países */}
         {sortedSelectedCountries.length > 0 && (
-            <div className="mt-4">
-                <h3 
-                    className="font-display text-lg font-bold text-primary mb-2"
-                >
-                    Countries You Have Visited:
-                </h3>
-                <p 
-                    className="text-sm text-gray-700 leading-relaxed break-words px-4" // px-4 para que no llegue a los bordes
-                    style={{ columnCount: 3, columnGap: '20px', textAlign: 'left' }} // Lista en columnas
-                >
-                    {sortedSelectedCountries.map(country => (
-                        <span key={country} style={{ display: 'block', marginBottom: '4px' }}>{country}</span>
-                    ))}
-                </p>
+          <div className="w-full mt-10 px-4">
+            <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+              <span className="w-2 h-8 bg-teal-600 rounded-full block"></span>
+              Visited Destinations
+            </h3>
+            
+            <div 
+              className="text-lg text-slate-600 font-medium leading-relaxed"
+              style={{ 
+                columnCount: 4, 
+                columnGap: '40px',
+                textAlign: 'left'
+              }}
+            >
+              {sortedSelectedCountries.map(country => (
+                <div key={country} className="mb-2 break-inside-avoid hover:text-teal-700 transition-colors">
+                  • {country}
+                </div>
+              ))}
             </div>
+          </div>
         )}
+
+        {/* Branding Footer */}
+        <div className="w-full mt-12 pt-6 border-t border-slate-100 flex justify-between items-center text-slate-400">
+          <span className="text-lg">Generated with <strong>TravelMap</strong></span>
+          <span className="text-lg">{new Date().getFullYear()}</span>
+        </div>
+      </div>
     </div>
   );
 });
