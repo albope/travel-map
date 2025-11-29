@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback } from 'react';
 import { MapContainer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import countriesData from '../data/world-110m.json';
-import { FaGlobeAmericas, FaPlaneDeparture } from 'react-icons/fa';
+import { FaGlobeAmericas } from 'react-icons/fa';
 
 const MapImageGenerator = forwardRef((
   {
@@ -11,15 +11,14 @@ const MapImageGenerator = forwardRef((
     visitedPercentage
   }, ref) => {
 
-  // CONFIGURACIÓN DE MAPA
-  // Ajustamos el zoom un poco para asegurar que TODO el mundo (NZ, Alaska, etc.) entre cómodamente.
-  const initialCenter = [25, 0]; 
-  const initialZoom = 1.45; // Zoom ligeramente reducido para márgenes de seguridad
+  // CONFIGURACIÓN DE MAPA (Panorámico)
+  const initialCenter = [28, 0]; 
+  const initialZoom = 1.6; 
 
-  // ESTILOS DE LUJO
+  // ESTILOS SWISS / MODERN
   const GOLD_COLOR = "#D4AF37"; 
-  const DEEP_NAVY = "#0F172A"; 
-  const MAP_FILL_DEFAULT = "#F1F5F9"; 
+  const DARK_INK = "#111111"; // Negro casi puro
+  const MAP_FILL_DEFAULT = "#F3F4F6"; // Gris muy claro para países no visitados
   const MAP_STROKE = "#FFFFFF"; 
 
   const styleFeature = useCallback((feature) => {
@@ -28,7 +27,7 @@ const MapImageGenerator = forwardRef((
       fillColor: isSelected ? GOLD_COLOR : MAP_FILL_DEFAULT,
       fillOpacity: 1,
       color: MAP_STROKE,
-      weight: 0.6, 
+      weight: 0.5, 
       dashArray: "", 
     };
   }, [selectedCountries]);
@@ -39,145 +38,114 @@ const MapImageGenerator = forwardRef((
     // CONTENEDOR PRINCIPAL (EL LIENZO)
     <div
       ref={ref}
-      className="flex flex-col items-center relative box-border"
+      className="flex flex-col relative box-border bg-white"
       style={{
         width: '1200px', 
-        // Aumentamos altura para evitar cortes en la lista de países
-        minHeight: '1800px', 
+        minHeight: '1600px', 
         padding: '80px',
-        backgroundColor: '#FFFEFA', 
         fontFamily: "'Inter', sans-serif",
-        color: DEEP_NAVY
+        color: DARK_INK
       }}
     >
-      {/* Inyección de Fuente Serif */}
-      <style>
-        {`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');`}
-      </style>
-
-      {/* --- MARCO DECORATIVO --- */}
-      <div 
-        className="absolute inset-0 pointer-events-none" 
-        style={{ 
-          margin: '30px', 
-          border: `1px solid ${DEEP_NAVY}`, 
-          opacity: 0.1 
-        }} 
-      />
-
-      {/* --- HEADER EDITORIAL --- */}
-      <header className="w-full text-center mb-16 relative z-10">
-        {/* Título con más margen inferior para que no se monte */}
-        <div className="inline-block border-b-2 border-slate-900 pb-6 mb-8">
+      {/* --- HEADER --- */}
+      <header className="flex flex-col gap-8 mb-16 border-b-4 border-black pb-12">
+        <div className="flex justify-between items-end">
           <h1 
-            style={{ 
-              fontFamily: "'Playfair Display', serif", 
-              fontSize: '90px', // Un poco más grande para impacto
-              lineHeight: '1.1', // Más altura de línea para evitar choques con ascendentes/descendentes
-              letterSpacing: '-0.02em',
-              color: DEEP_NAVY,
-              marginBottom: '10px' // Margen extra de seguridad
-            }}
+            className="uppercase font-black leading-none tracking-tighter"
+            style={{ fontSize: '130px' }}
           >
-            World Traveler
+            World<br/>Traveler
           </h1>
+          
+          {/* STATS CORREGIDAS: Mayor separación y alineación limpia */}
+          <div className="flex flex-col items-end text-right gap-10 pb-2">
+            <div className="flex flex-col items-end">
+              {/* Quitamos leading-none y aumentamos margen inferior para evitar solapamiento */}
+              <span className="block text-6xl font-bold tracking-tighter mb-4">{visitedCountriesCount}</span>
+              <span className="text-sm font-bold uppercase tracking-widest bg-black text-white px-3 py-1.5">Countries</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="block text-6xl font-bold tracking-tighter mb-4">{visitedPercentage}%</span>
+              <span className="text-sm font-bold uppercase tracking-widest bg-black text-white px-3 py-1.5">Coverage</span>
+            </div>
+          </div>
         </div>
         
-        {/* Subtítulo alineado perfectamente */}
-        <div className="flex justify-center items-center gap-12 text-lg font-medium tracking-widest uppercase text-slate-500">
-          <div className="flex items-center gap-3 h-6">
-            <FaPlaneDeparture style={{ color: GOLD_COLOR, fontSize: '1.2em' }} />
-            <span style={{ paddingTop: '2px' }}>The Journey So Far</span>
-          </div>
-          <span className="text-slate-300 h-6 flex items-center">•</span>
-          <div className="flex items-center gap-3 h-6">
-            <span style={{ paddingTop: '2px' }}>{new Date().getFullYear()} Edition</span>
-          </div>
+        <div className="flex justify-between items-center text-lg font-bold uppercase tracking-wider text-gray-500">
+          <span>The Journey So Far</span>
+          <span>{new Date().getFullYear()} Collection</span>
         </div>
       </header>
 
-      {/* --- ESTADÍSTICAS DESTACADAS (HERO) --- */}
-      {/* Alineación corregida: Ambos bloques centrados en su columna */}
-      <div className="w-full grid grid-cols-2 gap-0 mb-12 px-20">
-        <div className="flex flex-col items-center border-r border-slate-200 py-2">
-          <span className="block text-7xl font-bold text-slate-900 leading-none mb-3">
-            {visitedCountriesCount}
-          </span>
-          <span className="text-sm font-bold uppercase tracking-widest text-slate-400">
-            Countries Visited
-          </span>
-        </div>
-        <div className="flex flex-col items-center py-2">
-          <span className="block text-7xl font-bold text-slate-900 leading-none mb-3">
-            {visitedPercentage}%
-          </span>
-          <span className="text-sm font-bold uppercase tracking-widest text-slate-400">
-            Global Coverage
-          </span>
-        </div>
-      </div>
-
-      {/* --- MAPA CENTRAL --- */}
-      <div 
-        className="w-full relative mb-16"
-        style={{ height: '750px' }} // Un poco más alto
-      >
-        <MapContainer
-          center={initialCenter}
-          zoom={initialZoom}
-          zoomControl={false}
-          attributionControl={false}
-          style={{ width: '100%', height: '100%', background: 'transparent' }}
-          preferCanvas={true}
-          dragging={false}
-          scrollWheelZoom={false}
-          doubleClickZoom={false}
-        >
-          <GeoJSON
-            data={countriesData.features}
-            style={styleFeature}
-          />
-        </MapContainer>
-      </div>
-
-      {/* --- LISTA DE DESTINOS --- */}
-      {sortedSelectedCountries.length > 0 && (
-        <div className="w-full mt-8 mb-16"> {/* Margen inferior extra para que no pegue al footer */}
-          <div className="flex items-center gap-4 mb-10">
-            <div className="h-px bg-slate-200 flex-grow"></div>
-            <h3 
-              className="text-xl font-bold uppercase tracking-widest text-slate-900 px-4"
-              style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}
-            >
-              Visited Destinations Check-list
-            </h3>
-            <div className="h-px bg-slate-200 flex-grow"></div>
-          </div>
-
+      {/* --- MIDDLE: COUNTRY LIST --- */}
+      <div className="flex-grow mb-16">
+        {/* Alineación corregida: items-center centra el cuadrado con las mayúsculas */}
+        <h3 className="text-2xl font-black uppercase tracking-widest mb-10 flex items-center gap-4">
+          <span className="w-4 h-4 bg-black block flex-shrink-0"></span>
+          <span>Checklist</span>
+        </h3>
+        
+        {sortedSelectedCountries.length > 0 ? (
           <div 
-            className="grid grid-cols-5 gap-y-4 gap-x-8 text-left w-full px-8"
-            style={{ fontSize: '14px' }} 
+            // GRID DE 3 COLUMNAS
+            // Usamos items-start para permitir que el texto salte de línea sin romper la alineación del bullet
+            className="grid grid-cols-3 gap-x-12 gap-y-6 w-full"
+            style={{ fontSize: '16px', fontWeight: '600' }} 
           >
             {sortedSelectedCountries.map(country => (
-              <div key={country} className="flex items-start gap-3 text-slate-600 leading-tight">
-                <span 
-                  className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" 
-                  style={{ backgroundColor: GOLD_COLOR }}
-                />
-                <span className="">{country}</span>
+              <div key={country} className="flex items-start gap-4 border-b border-gray-100 pb-2 group">
+                 {/* Bullet CUADRADO, alineado con la primera línea de texto (mt-1.5) */}
+                 <span className="w-2 h-2 bg-gray-300 group-hover:bg-[#D4AF37] transition-colors flex-shrink-0 mt-2"></span>
+                 {/* Permitimos que el texto haga wrap (sin truncate) */}
+                 <span className="text-gray-800 leading-tight">{country}</span>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p className="text-gray-400 text-xl font-medium italic pl-8">No destinations selected yet.</p>
+        )}
+      </div>
 
-      {/* --- FOOTER DE MARCA --- */}
-      <div className="absolute bottom-8 left-0 right-0 text-center">
-        <div className="inline-flex items-center gap-3 text-xs font-bold tracking-[0.2em] text-slate-300 uppercase">
-          <FaGlobeAmericas />
-          <span>Generated with TravelMap</span>
+      {/* --- BOTTOM: THE MAP --- */}
+      <div className="w-full relative mt-auto">
+        <h3 className="text-2xl font-black uppercase tracking-widest mb-6 flex items-center gap-4">
+          <span className="w-4 h-4 bg-[#D4AF37] block flex-shrink-0"></span>
+          <span>Visual Record</span>
+        </h3>
+        
+        {/* Marco negro grueso para estilo Suizo */}
+        <div 
+          className="w-full relative border-4 border-black bg-white"
+          style={{ height: '550px' }} 
+        >
+          <MapContainer
+            center={initialCenter}
+            zoom={initialZoom}
+            zoomControl={false}
+            attributionControl={false}
+            style={{ width: '100%', height: '100%', background: 'transparent' }}
+            preferCanvas={true}
+            dragging={false}
+            scrollWheelZoom={false}
+            doubleClickZoom={false}
+          >
+            <GeoJSON
+              data={countriesData.features}
+              style={styleFeature}
+            />
+          </MapContainer>
+        </div>
+        
+        {/* FOOTER */}
+        <div className="flex justify-between items-center mt-6 pt-6 border-t border-gray-100 text-gray-400 text-sm font-bold uppercase tracking-widest">
+           <div className="flex items-center gap-2">
+             <FaGlobeAmericas />
+             Generated with TravelMap
+           </div>
+           <div>Personal Travel History</div>
         </div>
       </div>
+
     </div>
   );
 });
