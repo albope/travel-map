@@ -18,7 +18,8 @@ const MapImageGenerator = forwardRef((
   // ESTILOS SWISS / MODERN
   const GOLD_COLOR = "#D4AF37"; 
   const DARK_INK = "#111111"; // Negro casi puro
-  const MAP_FILL_DEFAULT = "#F3F4F6"; // Gris muy claro para países no visitados
+  // CAMBIO: Gris más oscuro para que contraste con el océano blanco
+  const MAP_FILL_DEFAULT = "#E2E8F0"; 
   const MAP_STROKE = "#FFFFFF"; 
 
   const styleFeature = useCallback((feature) => {
@@ -57,15 +58,16 @@ const MapImageGenerator = forwardRef((
             World<br/>Traveler
           </h1>
           
-          {/* STATS CORREGIDAS: Mayor separación y alineación limpia */}
+          {/* STATS CORREGIDAS: Mayor leading y margen para evitar solapamiento */}
           <div className="flex flex-col items-end text-right gap-10 pb-2">
             <div className="flex flex-col items-end">
-              {/* Quitamos leading-none y aumentamos margen inferior para evitar solapamiento */}
-              <span className="block text-6xl font-bold tracking-tighter mb-4">{visitedCountriesCount}</span>
+              {/* CAMBIO: mb-6 y leading-tight para más aire */}
+              <span className="block text-6xl font-bold tracking-tighter mb-6 leading-tight">{visitedCountriesCount}</span>
               <span className="text-sm font-bold uppercase tracking-widest bg-black text-white px-3 py-1.5">Countries</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="block text-6xl font-bold tracking-tighter mb-4">{visitedPercentage}%</span>
+              {/* CAMBIO: mb-6 y leading-tight para más aire */}
+              <span className="block text-6xl font-bold tracking-tighter mb-6 leading-tight">{visitedPercentage}%</span>
               <span className="text-sm font-bold uppercase tracking-widest bg-black text-white px-3 py-1.5">Coverage</span>
             </div>
           </div>
@@ -79,7 +81,6 @@ const MapImageGenerator = forwardRef((
 
       {/* --- MIDDLE: COUNTRY LIST --- */}
       <div className="flex-grow mb-16">
-        {/* Alineación corregida: items-center centra el cuadrado con las mayúsculas */}
         <h3 className="text-2xl font-black uppercase tracking-widest mb-10 flex items-center gap-4">
           <span className="w-4 h-4 bg-black block flex-shrink-0"></span>
           <span>Checklist</span>
@@ -87,16 +88,12 @@ const MapImageGenerator = forwardRef((
         
         {sortedSelectedCountries.length > 0 ? (
           <div 
-            // GRID DE 3 COLUMNAS
-            // Usamos items-start para permitir que el texto salte de línea sin romper la alineación del bullet
             className="grid grid-cols-3 gap-x-12 gap-y-6 w-full"
             style={{ fontSize: '16px', fontWeight: '600' }} 
           >
             {sortedSelectedCountries.map(country => (
               <div key={country} className="flex items-start gap-4 border-b border-gray-100 pb-2 group">
-                 {/* Bullet CUADRADO, alineado con la primera línea de texto (mt-1.5) */}
                  <span className="w-2 h-2 bg-gray-300 group-hover:bg-[#D4AF37] transition-colors flex-shrink-0 mt-2"></span>
-                 {/* Permitimos que el texto haga wrap (sin truncate) */}
                  <span className="text-gray-800 leading-tight">{country}</span>
               </div>
             ))}
@@ -113,7 +110,7 @@ const MapImageGenerator = forwardRef((
           <span>Visual Record</span>
         </h3>
         
-        {/* Marco negro grueso para estilo Suizo */}
+        {/* Marco negro grueso y fondo blanco explícito */}
         <div 
           className="w-full relative border-4 border-black bg-white"
           style={{ height: '550px' }} 
@@ -123,7 +120,7 @@ const MapImageGenerator = forwardRef((
             zoom={initialZoom}
             zoomControl={false}
             attributionControl={false}
-            style={{ width: '100%', height: '100%', background: 'transparent' }}
+            style={{ width: '100%', height: '100%', background: '#FFFFFF' }}
             preferCanvas={true}
             dragging={false}
             scrollWheelZoom={false}
